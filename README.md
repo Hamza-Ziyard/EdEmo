@@ -18,7 +18,7 @@ ___
 
 ### Team Members
 ___
-- We are 2nd year undergradutaes of Informatics Intitute of Techology.
+- Our team members are 2nd year Software Engineering and Computer Science undergradutaes from Informatics Intitute of Techology. Our names are mentioned below.
 
     * Suhith Nanayakkara
     * Charani Hasara
