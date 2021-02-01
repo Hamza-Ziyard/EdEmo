@@ -14,11 +14,11 @@
 ### ---- Important ----
 ___
 
-- Read the requirment text [here](https://github.com/hamzaziyard-devep/EdEmo/tree/main/Requirements) to setup all basic requirments.
+- Read the requirment text [here](https://github.com/hamzaziyard-devep/EdEmo/tree/main/Requirements) to setup all basic requirements.
 
 ### Team Members
 ___
-- Our team members are 2nd year Software Engineering and Computer Science undergradutaes from Informatics Intitute of Techology. Our names are mentioned below.
+- Our team members are 2nd year Software Engineering and Computer Science undergraduates from Informatics Intitute of Techology. Our names are mentioned below.
 
     * Suhith Nanayakkara
     * Charani Hasara
