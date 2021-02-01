@@ -7,5 +7,4 @@
     * Participant emotion detection.
     * Chatbot engagement.
     
-- Rich Picture Diagram
-!(https://github.com/hamzaziyard-devep/EdEmo/blob/main/Images/rpd.png "Rich Picture Diagram")
+![](https://github.com/hamzaziyard-devep/EdEmo/blob/main/Images/rpd.png "Rich Picture Diagram")
