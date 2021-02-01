@@ -11,4 +11,4 @@
 
 ![](https://github.com/hamzaziyard-devep/EdEmo/blob/main/Images/rpd.png "Rich Picture Diagram")
 
-- Read the requirment text [here](https://github.com/hamzaziyard-devep/EdEmo/blob/main/Requiements/) o setup all basic requirments.
+- Read the requirment text [here](https://github.com/hamzaziyard-devep/EdEmo/blob/main/Requiements/) to setup all basic requirments.
