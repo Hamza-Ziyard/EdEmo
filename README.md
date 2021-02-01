@@ -11,4 +11,18 @@
 
 ![](https://github.com/hamzaziyard-devep/EdEmo/blob/main/Images/rpd.png "Rich Picture Diagram")
 
+### ---- Important ----
+___
+
 - Read the requirment text [here](https://github.com/hamzaziyard-devep/EdEmo/tree/main/Requirements) to setup all basic requirments.
+
+### Team Members
+___
+- Our team members are 2nd year Software Engineering and Computer Science undergradutaes from Informatics Intitute of Techology. Our names are mentioned below.
+
+    * Suhith Nanayakkara
+    * Charani Hasara
+    * Ginura Weliwatte
+    * Hamza Ziyard
+    * Hiruni Silva
+    * Samadi Udara
