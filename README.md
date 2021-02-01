@@ -11,4 +11,7 @@
 
 ![](https://github.com/hamzaziyard-devep/EdEmo/blob/main/Images/rpd.png "Rich Picture Diagram")
 
+### Important
+___
+
 - Read the requirment text [here](https://github.com/hamzaziyard-devep/EdEmo/tree/main/Requirements) to setup all basic requirments.
