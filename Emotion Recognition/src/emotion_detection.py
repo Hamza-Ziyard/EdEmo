@@ -1,9 +1,48 @@
+import argparse
+
 import cv2
 import numpy as np
+from keras_preprocessing.image import ImageDataGenerator
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D
 from tensorflow.keras.layers import MaxPooling2D
 from tensorflow.keras.layers import Dense, Dropout, Flatten
+from tensorflow_core.python.keras.optimizers import Adam
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+
+# Get commands from user
+ap = argparse.ArgumentParser()
+ap.add_argument("--mode", help="train/display")
+mode = ap.parse_args().mode
+
+# Defining data directories
+train_dir = 'data/train'
+test_dir = 'data/test'
+
+num_train = 28709
+num_val = 7178
+batch_size = 64
+num_epoch = 50
+
+# Convert the each pixel to 8 bit value
+train_datagen = ImageDataGenerator(rescale=1./255)
+val_datagen = ImageDataGenerator(rescale=1./255)
+
+# Get dataset from the directories
+train_generator = train_datagen.flow_from_directory(
+        train_dir,
+        target_size=(48,48),
+        batch_size=batch_size,
+        color_mode="grayscale",
+        class_mode='categorical')
+
+test_generator = val_datagen.flow_from_directory(
+        test_dir,
+        target_size=(48,48),
+        batch_size=batch_size,
+        color_mode="grayscale",
+        class_mode='categorical')
 
 # Creating the edEmoModel
 edEmoModel = Sequential()
@@ -24,6 +63,10 @@ edEmoModel.add(Flatten())
 edEmoModel.add(Dense(1024, activation='relu'))
 edEmoModel.add(Dropout(0.5))
 edEmoModel.add(Dense(7, activation='softmax'))
+
+# If you want to train the same model or try other models, go for this
+
+
 
 # Facial detection using haarcascade classifiers
 
