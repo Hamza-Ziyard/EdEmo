@@ -15,7 +15,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 # Get commands from user
 ap = argparse.ArgumentParser()
 ap.add_argument("--modelMode", help="train/display")
-modelMode = ap.parse_args().mode
+modelMode = ap.parse_args().modelMode
 
 
 # plots accuracy and loss curves
