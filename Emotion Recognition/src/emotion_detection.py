@@ -1,5 +1,4 @@
 import argparse
-
 import cv2
 import numpy as np
 from keras_preprocessing.image import ImageDataGenerator
@@ -9,12 +8,42 @@ from tensorflow.keras.layers import MaxPooling2D
 from tensorflow.keras.layers import Dense, Dropout, Flatten
 from tensorflow_core.python.keras.optimizers import Adam
 import os
+import matplotlib.pyplot as mat_plt
+
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 # Get commands from user
 ap = argparse.ArgumentParser()
-ap.add_argument("--mode", help="train/display")
-mode = ap.parse_args().mode
+ap.add_argument("--modelMode", help="train/display")
+modelMode = ap.parse_args().mode
+
+
+# plots accuracy and loss curves
+def plot_edEmo_model_history(model_history):
+    """
+    Plot Accuracy and Loss curves given the edEmomodel_history
+    """
+    figure, axis = mat_plt.subplots(1, 2, figsize=(15, 5))
+    # summarize history for accuracy
+    axis[0].plot(range(1, len(model_history.history['accuracy']) + 1), model_history.history['accuracy'])
+    axis[0].plot(range(1, len(model_history.history['val_accuracy']) + 1), model_history.history['val_accuracy'])
+    axis[0].set_title('Model Accuracy')
+    axis[0].set_ylabel('Accuracy')
+    axis[0].set_xlabel('Epoch')
+    axis[0].set_xticks(np.arange(1, len(model_history.history['accuracy']) + 1),
+                      len(model_history.history['accuracy']) / 10)
+    axis[0].legend(['train', 'val'], loc='best')
+    # summarize history for loss
+    axis[1].plot(range(1, len(model_history.history['loss']) + 1), model_history.history['loss'])
+    axis[1].plot(range(1, len(model_history.history['val_loss']) + 1), model_history.history['val_loss'])
+    axis[1].set_title('Model Loss')
+    axis[1].set_ylabel('Loss')
+    axis[1].set_xlabel('Epoch')
+    axis[1].set_xticks(np.arange(1, len(model_history.history['loss']) + 1), len(model_history.history['loss']) / 10)
+    axis[1].legend(['train', 'val'], loc='best')
+    figure.savefig('plot.png')
+    mat_plt.show()
+
 
 # Defining data directories
 train_dir = 'data/train'
@@ -26,23 +55,23 @@ batch_size = 64
 num_epoch = 50
 
 # Convert the each pixel to 8 bit value
-train_datagen = ImageDataGenerator(rescale=1./255)
-val_datagen = ImageDataGenerator(rescale=1./255)
+train_datagen = ImageDataGenerator(rescale=1. / 255)
+val_datagen = ImageDataGenerator(rescale=1. / 255)
 
 # Get dataset from the directories
 train_generator = train_datagen.flow_from_directory(
-        train_dir,
-        target_size=(48,48),
-        batch_size=batch_size,
-        color_mode="grayscale",
-        class_mode='categorical')
+    train_dir,
+    target_size=(48, 48),
+    batch_size=batch_size,
+    color_mode="grayscale",
+    class_mode='categorical')
 
 test_generator = val_datagen.flow_from_directory(
-        test_dir,
-        target_size=(48,48),
-        batch_size=batch_size,
-        color_mode="grayscale",
-        class_mode='categorical')
+    test_dir,
+    target_size=(48, 48),
+    batch_size=batch_size,
+    color_mode="grayscale",
+    class_mode='categorical')
 
 # Creating the edEmoModel
 edEmoModel = Sequential()
@@ -65,51 +94,65 @@ edEmoModel.add(Dropout(0.5))
 edEmoModel.add(Dense(7, activation='softmax'))
 
 # If you want to train the same model or try other models, go for this
-
+if modelMode == "train":
+    edEmoModel.compile(loss='categorical_crossentropy', optimizer=Adam(lr=0.0001, decay=1e-6), metrics=['accuracy'])
+    edEmoModelInfo = edEmoModel.fit_generator(
+        train_generator,
+        steps_per_epoch=num_train // batch_size,
+        epochs=num_epoch,
+        validation_data=test_generator,
+        validation_steps=num_val // batch_size)
+    plot_edEmo_model_history(edEmoModelInfo)
+    edEmoModel.save_weights('model.h5')
 
 
 # Facial detection using haarcascade classifiers
+# emotions will be displayed on your face from the webcam feed
+elif modelMode == "display":
+    edEmoModel.load_weights('model.h5')
 
-# loading haarcascade classifiers
-face_cascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
+    # prevents openCL usage and unnecessary logging messages
+    cv2.ocl.setUseOpenCL(False)
 
-# dictionary which assigns each label an emotion (alphabetical order)
-emotion_dictionary = {0: "Angry", 1: "Disgusted", 2: "Fearful", 3: "Happy", 4: "Neutral", 5: "Sad", 6: "Surprised"}
+    # loading haarcascade classifiers
+    face_cascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
 
-# Start webcam feed
-video_capture = cv2.VideoCapture(0)
+    # dictionary which assigns each label an emotion (alphabetical order)
+    emotion_dictionary = {0: "Angry", 1: "Disgusted", 2: "Fearful", 3: "Happy", 4: "Neutral", 5: "Sad", 6: "Surprised"}
 
-while True:
-    # Capture each frame at a time
-    ret, frame = video_capture.read()
-    if not ret:
-        break
+    # Start webcam feed
+    video_capture = cv2.VideoCapture(0)
 
-    # converting rgb to grayscale
-    grayscaleImages = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    faces = face_cascade.detectMultiScale(
-        grayscaleImages,
-        scaleFactor=1.3,
-        minNeighbors=5)
+    while True:
+        # Capture each frame at a time
+        ret, frame = video_capture.read()
+        if not ret:
+            break
 
-    # Draw rectangle
-    for (x, y, w, h) in faces:
-        cv2.rectangle(frame, (x, y - 50), (x + w, y + h + 10), (255, 0, 0), 2)
-        roi_gray = grayscaleImages[y:y + h, x:x + w]
-        cropped_img = np.expand_dims(np.expand_dims(cv2.resize(roi_gray, (48, 48)), -1), 0)
-        prediction = edEmoModel.predict(cropped_img)
-        maximumIndex = int(np.argmax(prediction))
-        cv2.putText(frame, emotion_dictionary[maximumIndex], (x + 20, y - 60), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2,
-                    cv2.LINE_AA)
+        # converting rgb to grayscale
+        grayscaleImages = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        faces = face_cascade.detectMultiScale(
+            grayscaleImages,
+            scaleFactor=1.3,
+            minNeighbors=5)
 
-    # Display frame
-    cv2.imshow('Video', frame)
+        # Draw rectangle
+        for (x, y, w, h) in faces:
+            cv2.rectangle(frame, (x, y - 50), (x + w, y + h + 10), (255, 0, 0), 2)
+            roi_gray = grayscaleImages[y:y + h, x:x + w]
+            cropped_img = np.expand_dims(np.expand_dims(cv2.resize(roi_gray, (48, 48)), -1), 0)
+            prediction = edEmoModel.predict(cropped_img)
+            maximumIndex = int(np.argmax(prediction))
+            cv2.putText(frame, emotion_dictionary[maximumIndex], (x + 20, y - 60), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                        (255, 255, 255), 2,
+                        cv2.LINE_AA)
 
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+        # Display frame
+        cv2.imshow('Video', frame)
 
-# When everything is done, release the capture
-video_capture.release()
-cv2.destroyAllWindows()
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
 
-
+    # When everything is done, release the capture
+    video_capture.release()
+    cv2.destroyAllWindows()
