@@ -6,7 +6,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D
 from tensorflow.keras.layers import MaxPooling2D
 from tensorflow.keras.layers import Dense, Dropout, Flatten
-from tensorflow_core.python.keras.optimizers import Adam
+from tensorflow.keras.optimizers import Adam
 import os
 import matplotlib.pyplot as mat_plt
 
@@ -95,7 +95,7 @@ edEmoModel.add(Dense(7, activation='softmax'))
 
 # If you want to train the same model or try other models, go for this
 if modelMode == "train":
-    edEmoModel.compile(loss='categorical_crossentropy', optimizer=Adam(lr=0.0001, decay=1e-6), metrics=['accuracy'])
+    edEmoModel.compile(loss='categorical_crossentropy',optimizer=Adam(lr=0.0001, decay=1e-6),metrics=['accuracy'])
     edEmoModelInfo = edEmoModel.fit_generator(
         train_generator,
         steps_per_epoch=num_train // batch_size,
