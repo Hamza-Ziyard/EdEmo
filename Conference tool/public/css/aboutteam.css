@@ -51,7 +51,8 @@ hr {
 .content p {
   color: white;
   font-family: "Rajdhani", sans-serif;
-  margin-left: 12%;
+  margin-left: 10%;
+  margin-right: 10%;
   font-size: 20px;
 }
 
@@ -88,6 +89,7 @@ hr {
   position: absolute;
   top: 40%;
   left: 15%;
+  right: 15%;
   display: flex;
 }
 
