@@ -1,0 +1,63 @@
+{
+  "intents": [
+    {
+      "tag": "greeting",
+      "patterns": [
+        "Hi",
+        "Hey",
+        "How are you",
+        "Is anyone there?",
+        "Hello",
+        "Good day"
+      ],
+      "responses": [
+        "Hey :-)",
+        "Hello, thanks for visiting",
+        "Hi there, what can I do for you?",
+        "Hi there, how can I help?"
+      ]
+    },
+    {
+      "tag": "goodbye",
+      "patterns": ["Bye", "See you later", "Goodbye"],
+      "responses": [
+        "See you later, thanks for visiting",
+        "Have a nice day",
+        "Bye! See you later."
+      ]
+    },
+    {
+      "tag": "thanks",
+      "patterns": ["Thanks", "Thank you", "That's helpful", "Thank's a lot!"],
+      "responses": ["Happy to help!", "Any time!", "My pleasure"]
+    },
+    {
+      "tag": "Motivation",
+      "patterns": ["Motivate", "Something motivational", "motivational", "Tell me something motivational"],
+      "responses": ["There are no shortcuts to any place worth going. – Beverly Sills",
+        "There is no substitute for hard work. – Thomas Edison",
+        "There are no traffic jams on the extra mile. – Zig Ziglar",
+        "The only place where success comes before work is in the dictionary. – Vidal Sassoon"
+      ]
+    },
+    {
+      "tag": "funny",
+      "patterns": [
+        "Tell me a joke!",
+        "Tell me something funny!",
+        "Do you know a joke?"
+      ],
+      "responses": [
+        "Why did the hipster burn his mouth? He drank the coffee before it was cool.",
+        "What did the buffalo say when his son left for college? Bison."
+      ]
+    },
+    {
+      "tag": "Focus",
+      "patterns": ["How to focus", "Focus", "Ways to focus"],
+      "responses": ["Count from 20 to 1 by skipping all the odd numbers",
+        "Close your eyes for 5 seconds and take a deep breathe"
+      ]
+    }
+  ]
+}
