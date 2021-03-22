@@ -26,33 +26,24 @@ app.get('', (req, res) => {
   res.render('home')
 })
 
-
 app.get('/aboutteam',(req,res)=>{
   res.render('aboutteam')
 })
-
 app.get('/aboutapp',(req,res)=>{
   res.render('aboutapp')
 })
-
-
-
 app.get('/leave',(req,res)=>{
   res.render('leave')
 })
-
 app.get('/results',(req,res)=>{
   res.render('results')
 })
-
 app.get('/resources',(req,res)=>{
   res.render('resources')
 })
-
 app.get('/room', (req, res) => {
   res.redirect(`/${uuidV4()}`)
 })
-
 app.get('/:room', (req, res) => {
   res.render('room', { roomId: req.params.room })
 })

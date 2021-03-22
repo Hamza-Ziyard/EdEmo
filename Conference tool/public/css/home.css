@@ -20,7 +20,7 @@ body {
         border-radius: 3px;
       }
 
-      
+
 .completeBox {
   position: relative;
 }
@@ -181,4 +181,8 @@ h1 span {
   height: 40px;
   width: 40px;
   cursor: pointer;
+}
+
+button{
+  outline: none;
 }
