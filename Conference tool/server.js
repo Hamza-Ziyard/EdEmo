@@ -35,9 +35,6 @@ app.get('/aboutapp',(req,res)=>{
 app.get('/leave',(req,res)=>{
   res.render('leave')
 })
-app.get('/results',(req,res)=>{
-  res.render('results')
-})
 app.get('/resources',(req,res)=>{
   res.render('resources')
 })
@@ -68,4 +65,4 @@ io.on('connection', socket => {
 })
 
 
-server.listen(5000)
+server.listen(process.env.PORT || 5000)

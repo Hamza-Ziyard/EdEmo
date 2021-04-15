@@ -5,11 +5,15 @@ const myPeer = new Peer(undefined, {
   host: '/',
   port: '5000'
 })
+
+
 let myVideoStream;
 const myVideo = document.createElement('video')
 myVideo.muted = true;
 const peers = {}
 
+
+// getting the video and audio from the device
 navigator.mediaDevices.getUserMedia({
   video: true,
   audio: true
@@ -37,10 +41,12 @@ navigator.mediaDevices.getUserMedia({
     }
   });
   socket.on("createMessage", message => {
-    $("ul").append(`<li class="message"><b>user</b><br/>${message}</li>`);
+    $("ul").append(`<li class="message"><b>Participant</b><br/>${message}</li>`);
     scrollToBottom()
   })
 })
+
+
 
 socket.on('user-disconnected', userId => {
   if (peers[userId]) peers[userId].close()
@@ -63,21 +69,15 @@ function connectToNewUser(userId, stream) {
   peers[userId] = call
 }
 
-function addVideoStream(video, stream) {
-  video.srcObject = stream
-  video.addEventListener('loadedmetadata', () => {
-    video.play()
-  })
-  videoGrid.append(video)
-}
 
-
+// chat window scroll function
 const scrollToBottom = () => {
   var d = $('.main__chat_window');
   d.scrollTop(d.prop("scrollHeight"));
 }
 
 
+// mute and unmute functions
 const muteUnmute = () => {
   const enabled = myVideoStream.getAudioTracks()[0].enabled;
   if (enabled) {
@@ -86,18 +86,6 @@ const muteUnmute = () => {
   } else {
     setMuteButton();
     myVideoStream.getAudioTracks()[0].enabled = true;
-  }
-}
-
-const playStop = () => {
-  console.log('object')
-  let enabled = myVideoStream.getVideoTracks()[0].enabled;
-  if (enabled) {
-    myVideoStream.getVideoTracks()[0].enabled = false;
-    setPlayVideo()
-  } else {
-    setStopVideo()
-    myVideoStream.getVideoTracks()[0].enabled = true;
   }
 }
 
@@ -117,6 +105,20 @@ const setUnmuteButton = () => {
   document.querySelector('.main__mute_button').innerHTML = html;
 }
 
+
+// play and stop video Functions
+const playStop = () => {
+  console.log('object')
+  let enabled = myVideoStream.getVideoTracks()[0].enabled;
+  if (enabled) {
+    myVideoStream.getVideoTracks()[0].enabled = false;
+    setPlayVideo()
+  } else {
+    setStopVideo()
+    myVideoStream.getVideoTracks()[0].enabled = true;
+  }
+}
+
 const setStopVideo = () => {
   const html = `
     <i class="fas fa-video"></i>
@@ -132,3 +134,15 @@ const setPlayVideo = () => {
   `
   document.querySelector('.main__video_button').innerHTML = html;
 }
+
+
+// collecting the video and the stream function 
+function addVideoStream(video, stream) {
+  video.srcObject = stream
+  video.addEventListener('loadedmetadata', () => {
+    video.play()
+  })
+  videoGrid.append(video)
+}
+
+

@@ -11,11 +11,14 @@
       href="https://fonts.googleapis.com/css2?family=Jura:wght@700&display=swap"
       rel="stylesheet"
     />
+    
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap"
       rel="stylesheet"
     />
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   </head>
   <body>
     <div class="leftContainer">
@@ -35,7 +38,7 @@
         <button class="btn1"><a href="room">Create Session</a></button>
       </div>
       <div class="set1">
-        <button class="btn2">Join Session</button>
+        <button class="btn2" onclick="joinSession()">Join Session</button>
       </div>
 
       <div class="set2">
@@ -43,5 +46,25 @@
         <button class="btn2"><a href="aboutapp">About EdEmo</a></button>
       </div>
     </div>
+    <script>
+      function joinSession() {
+        let link = prompt('Add link to join')
+        if(link ==null){
+          alert('Thank you. Good Bye')
+        }else if(link==""){
+          alert('No link entered')
+        }
+        else{
+          let confirmation = confirm('Are you sure you want to navigate to '+link)
+          if(confirmation == true) {
+            window.location.href =link  
+            console.log('redirecting')
+          }else{
+            alert('Thank you. Good Bye')
+          }
+          console.log(link)
+        }
+      }
+    </script>
   </body>
 </html>

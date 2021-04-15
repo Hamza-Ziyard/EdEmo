@@ -108,6 +108,7 @@ h1 span {
   margin-bottom: 5%;
   transition: 0.5s;
   color: white;
+  cursor: pointer; 
 }
 
 .set1 .btn1:hover,
