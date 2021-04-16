@@ -47,7 +47,6 @@ navigator.mediaDevices.getUserMedia({
 })
 
 
-
 socket.on('user-disconnected', userId => {
   if (peers[userId]) peers[userId].close()
 })
@@ -79,6 +78,7 @@ const scrollToBottom = () => {
 
 // mute and unmute functions
 const muteUnmute = () => {
+  console.log('access audio controls')
   const enabled = myVideoStream.getAudioTracks()[0].enabled;
   if (enabled) {
     myVideoStream.getAudioTracks()[0].enabled = false;
@@ -106,9 +106,19 @@ const setUnmuteButton = () => {
 }
 
 
+
+const tracking = () => {
+  const html = `
+    <i class="unmute fas fa-microphone-slash"></i>
+    <span>Unmute</span>
+  `
+  document.querySelector('.main__tracking_button').innerHTML = html;
+}
+
+
 // play and stop video Functions
 const playStop = () => {
-  console.log('object')
+  console.log('access video controls')
   let enabled = myVideoStream.getVideoTracks()[0].enabled;
   if (enabled) {
     myVideoStream.getVideoTracks()[0].enabled = false;
@@ -146,3 +156,4 @@ function addVideoStream(video, stream) {
 }
 
 
+  

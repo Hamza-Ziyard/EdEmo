@@ -25,14 +25,57 @@
 
     <h1>You left the session.</h1><p>Rate your session experience!</p>
     <div class="starIcons">
-        <i class="fa fa-star-o fa-3x" aria-hidden="true" id="icon"></i>
-        <i class="fa fa-star-o fa-3x" aria-hidden="true" id="icon"></i>
-        <i class="fa fa-star-o fa-3x" aria-hidden="true" id="icon"></i>
-        <i class="fa fa-star-o fa-3x" aria-hidden="true" id="icon"></i>
-        <i class="fa fa-star-o fa-3x" aria-hidden="true" id="icon"></i>
+        <i class="fa fa-star-o fa-3x" aria-hidden="true" id="icon1" onclick="rateOne()"></i>
+        <i class="fa fa-star-o fa-3x" aria-hidden="true" id="icon2" onclick="rateTwo()"></i>
+        <i class="fa fa-star-o fa-3x" aria-hidden="true" id="icon3" onclick="rateThree()"></i>
+        <i class="fa fa-star-o fa-3x" aria-hidden="true" id="icon4" onclick="rateFour()"></i>
+        <i class="fa fa-star-o fa-3x" aria-hidden="true" id="icon5" onclick="rateFive()"></i>
     </div>
 
-    <button class="resultBtn">Display Engagment Results</button>
+    <!-- <button class="resultBtn">Display Engagment Results</button> -->
     <button class="resultBtn"><a href="resources">E-Library</a></button>
+    <script>
+        function rateOne(){
+            document.getElementById('icon1').style.color='gold';
+            document.getElementById('icon2').style.color='gray';
+            document.getElementById('icon3').style.color='gray';
+            document.getElementById('icon4').style.color='gray';
+            document.getElementById('icon5').style.color='gray';
+            alert("You have rated as dissatisfied. Thank you for your feedback...")
+        }
+        function rateTwo(){
+            document.getElementById('icon1').style.color='gold';
+            document.getElementById('icon2').style.color='gold';
+            document.getElementById('icon3').style.color='gray';
+            document.getElementById('icon4').style.color='gray';
+            document.getElementById('icon5').style.color='gray';
+            alert("You have rated as improvement needed. Thank you for your feedback...")
+        }
+        function rateThree(){
+            document.getElementById('icon1').style.color='gold';
+            document.getElementById('icon2').style.color='gold';
+            document.getElementById('icon3').style.color='gold';
+            document.getElementById('icon4').style.color='gray';
+            document.getElementById('icon5').style.color='gray';
+            alert("You have rated as moderate. Thank you for your feedback...")
+        }
+        function rateFour(){
+            document.getElementById('icon1').style.color='gold';
+            document.getElementById('icon2').style.color='gold';
+            document.getElementById('icon3').style.color='gold';
+            document.getElementById('icon4').style.color='gold';
+            document.getElementById('icon5').style.color='gray';
+            alert("You have rated as good. Thank you for your feedback...")
+        }
+        function rateFive(){
+            document.getElementById('icon1').style.color='gold';
+            document.getElementById('icon2').style.color='gold';
+            document.getElementById('icon3').style.color='gold';
+            document.getElementById('icon4').style.color='gold';
+            document.getElementById('icon5').style.color='gold';
+            alert("You have rated as excellent. Thank you for your feedback...")
+        }
+
+    </script>
 </body>
 </html>

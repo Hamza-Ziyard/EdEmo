@@ -32,6 +32,9 @@ app.get('/aboutteam',(req,res)=>{
 app.get('/aboutapp',(req,res)=>{
   res.render('aboutapp')
 })
+app.get('/tracking',(req,res)=>{
+  res.render('tracking')
+})
 app.get('/leave',(req,res)=>{
   res.render('leave')
 })
