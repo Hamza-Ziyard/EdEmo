@@ -1,0 +1,235 @@
+body {
+  margin: 0;
+  background-color: #141830;
+}
+
+::-webkit-scrollbar {
+  width: 15px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #1a1f3f;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #b9c1fa;
+  border-radius: 3px;
+}
+
+.bgVid {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  object-fit: fill;
+  z-index: -1;
+}
+
+h1 {
+  margin-top: 2%;
+  text-align: center;
+  font-size: 60px;
+  font-family: "Titillium Web", sans-serif;
+  color: rgb(255, 255, 255);
+  transition: 0.5s;
+}
+
+h1:hover {
+  transform: scale(1);
+}
+
+h1 span {
+  color: #2ebacc;
+  font-size: 70px;
+}
+
+hr {
+  background-color: rgb(133, 247, 255);
+}
+
+.content p {
+  color: white;
+  font-family: "Rajdhani", sans-serif;
+  margin-left: 10%;
+  margin-right: 10%;
+  font-size: 20px;
+}
+
+.backBtn {
+  position: absolute;
+  top: 5%;
+  right: 2%;
+}
+
+.mainBtn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-family: "Rajdhani", sans-serif;
+  background-color: #fc45fc;
+  border: none;
+  font-weight: bold;
+  font-size: 15px;
+  border-radius: 20px;
+  transition: 0.5s;
+  outline: none;
+}
+
+.mainBtn:hover {
+  transform: scale(1.1);
+  box-shadow: 2px 2px 15px #fc45fc;
+}
+
+.mainBtn a {
+  text-decoration: none;
+  color: black;
+}
+
+.cardBox {
+  position: absolute;
+  top: 40%;
+  left: 15%;
+  right: 15%;
+  display: flex;
+}
+
+.cardBox2 {
+  position: absolute;
+  top: 110%;
+  display: flex;
+}
+
+.card {
+  width: 250px;
+  height: 350px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 40px;
+  margin-left: 70px;
+  transition: 0.5s;
+}
+
+.card:hover {
+  transform: scale(1.1);
+  box-shadow: 5px 5px 25px #8187af;
+}
+
+.cardImg {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  height: 120px;
+  width: 120px;
+  margin-top: 40px;
+  border-radius: 100%;
+}
+
+.socialButBox {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 25px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.socialBut {
+  background-color: transparent;
+  padding: 2px 10px;
+  border: none;
+  text-align: center;
+  margin-left: 10%;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.socialBut:hover {
+  transform: scale(1.8);
+}
+
+.card p {
+  text-align: center;
+  color: whitesmoke;
+  font-size: 25px;
+  font-weight: bold;
+  font-family: "Rajdhani", sans-serif;
+}
+
+.card p span {
+  color: rgb(204, 204, 204);
+  font-size: 13px;
+}
+
+.finalBox {
+  position: absolute;
+  top: 150%;
+  left: 5%;
+  background-color: #0f1431;
+  width: 90%;
+  border-top-left-radius: 50px;
+  border-top-right-radius: 50px;
+}
+
+.finalBoxImg {
+  float: left;
+  margin-left: 5%;
+  z-index: -10;
+  height: 300px;
+  width: 30%;
+  transition: 0.5s;
+}
+
+.finalBoxPara {
+  padding-right: 25%;
+  font-family: "Titillium Web", sans-serif;
+  color: white;
+  font-size: 35px;
+}
+
+.finalBox button {
+  padding: 5px 20px;
+  border-radius: 10px;
+  background-color: #1d7985;
+  outline: none;
+  border: none;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 20px;
+  transition: 0.5s;
+}
+
+.finalBoxPara button:hover {
+  transform: scale(1.1);
+  box-shadow: 2px 2px 15px #1d7985;
+}
+
+.finalBox button a {
+  color: white;
+  text-decoration: none;
+}
+
+
+.socialMediaBut {
+  background-color: rgba(255,255,255,0.1);
+  padding: 1% 0%;
+  position: absolute;
+  top: 20%;
+  right: 0;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+
+.socialMediaBut button {
+  background-color: transparent;
+  border: none;
+  border-radius: 100%;
+  transition: 0.5s;
+}
+
+.socialMediaBut button:hover {
+  transform: scale(1.2);
+  padding: 0;
+}
+
+.socialMedia {
+  height: 40px;
+  width: 40px;
+  cursor: pointer;
+}
