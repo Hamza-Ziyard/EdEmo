@@ -23,9 +23,66 @@ video.addEventListener('play', () => {
   setInterval(async () => {
     const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions()
     const resizedDetections = faceapi.resizeResults(detections, displaySize)
-    canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
-    faceapi.draw.drawDetections(canvas, resizedDetections)
+    let chart = canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
+    // faceapi.draw.drawDetections(canvas, resizedDetections)
     faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
     faceapi.draw.drawFaceExpressions(canvas, resizedDetections)
+
+    
   }, 100)
 })
+
+
+// let chart = document.getElementById('myChart').getContext('2d');
+
+//     let lineChart = new Chart(chart, {
+//       type: 'line',
+//       data: {
+//         labels: ['Happy','Sad','Neutral','Surprised','Angry','Fear','Disgust'],
+//         datasets: [{
+//           label: 'Emotion',
+//           data:[
+//              1000,
+//              1120,
+//              200,
+//              400,
+//              1000,
+//              1100,
+//              300
+//           ]
+//         }]
+//       },
+//       options: {}
+//     });
+
+// var engagedDetection =['Happy','Neutral','Surprised']
+// var disengagedDetection =['Sad','Fear','Angry','Disgust']
+
+// var getEmotion = ['Engaged','Disengaged']
+
+// for (var i=0; i<engagedDetection.length; i++){
+//   console.log('Engaged '+engagedDetection[i])
+// }
+
+// for (var i=0; i<disengagedDetection.length; i++){
+//   console.log('Dis-Engaged '+disengagedDetection[i])
+// }
+
+
+// let chart = document.getElementById('myChart').getContext('2d');
+
+//     let lineChart = new Chart(chart, {
+//       type: 'line',
+//       data: {
+//         labels: detections,
+//         datasets: [{
+//           label: 'Emotion',
+//           data:[
+//              1000,
+//              1120,
+//              200,400
+//           ]
+//         }]
+//       },
+//       options: {}
+//     });
