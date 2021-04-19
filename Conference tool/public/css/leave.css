@@ -84,6 +84,7 @@ p{
     margin-left: auto;
     margin-right: auto;
     transition: 0.5s;
+    outline: none;
 }
 
 .resultBtn:hover{
