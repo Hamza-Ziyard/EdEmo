@@ -8,6 +8,7 @@ from flask_ngrok import run_with_ngrok
 import nltk
 from keras.models import load_model
 from nltk.stem import WordNetLemmatizer
+
 lemmatizer = WordNetLemmatizer()
 
 
@@ -20,9 +21,9 @@ classes = pickle.load(open("classes.pkl", "rb"))
 chatbot_app = Flask(__name__)
 run_with_ngrok(chatbot_app)
 
-@chatbot_app.route("/")
-def home():
-    return render_template("ChatBot.html")
+# @chatbot_app.route("/")
+# def home():
+#     return render_template("ChatBot.html")
 
 
 @chatbot_app.route("/get", methods=["POST"])
