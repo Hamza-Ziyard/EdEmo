@@ -45,6 +45,10 @@ app.get('/results',(req,res)=>{
   res.render('results')
 })
 
+app.get('/resources',(req,res)=>{
+  res.render('resources')
+})
+
 app.get('/room', (req, res) => {
   res.redirect(`/${uuidV4()}`)
 })
