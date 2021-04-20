@@ -97,7 +97,7 @@ class VideoCamera(object):
             self.time_data = np.append(self.time_data, current_time)
             status =""
 
-            if maxindex in [3, 5]:
+            if maxindex in [3, 4]:
                 self.prediction_data = np.append(self.prediction_data, probabities[maxindex].item() * 100)
                 status = "engaged"
                 print('enagaged')
