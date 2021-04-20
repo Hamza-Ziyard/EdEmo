@@ -1,11 +1,12 @@
-from flask import Flask, render_template, Response, make_response
+from flask import Flask, render_template, Response, make_response, request, session
 from camera import VideoCamera
+from flask_mail import Mail, Message
+from flask_session import Session
 
 app = Flask(__name__)
 
 video_cam = VideoCamera()
-
-
+app.secret_key = "wCazB6p1HZ"
 
 @app.route('/')
 def index():
@@ -21,9 +22,12 @@ def gen(camera):
 
 @app.route('/results')
 def display_graph():
+    file_name=video_cam.plot_graph()
+    session['results_image_name'] = file_name
     # file_name = video_cam.plot_graph()
-    file_name = video_cam.plot_graph()
+    #file_name = video_cam.plot_graph()
     # return render_template("results.html", graph="helloooooooo")
+    video_cam.__del__()
     return render_template('results.html', graph=file_name)
 
 
@@ -34,6 +38,40 @@ def video_feed():
     return Response(gen(video_cam),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
+
+email_id = 'edemodc@gmail.com'
+email_pw = 'demolitioncrew'
+
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = email_id
+app.config['MAIL_PASSWORD'] = email_pw
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+
+mail = Mail(app)
+
+
+@app.route('/send_message', methods=['GET', 'POST'])
+def send_result():
+    if request.method == "POST":
+        email = request.form['email']
+        # subject = request.form['subject']
+        subject = "Engagement results from EdEmo"
+        # msg = request.form['message']
+        msg = "Do not reply"
+        message = Message(subject, sender="edemodc@gmail.com", recipients=[email])
+        message.body = msg
+        file_name = session['results_image_name']
+        # print("+++++++++++++++++++++File name: "+file_name+"+++++++++++++++++++++++++++")
+        with app.open_resource("static\\"+file_name) as fp:
+            message.attach(file_name, "image/png", fp.read())
+
+        mail.send(message)
+        success = "Message sent"
+        return render_template("success.html", success=success)
+    else:
+        return render_template('results.html')
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)

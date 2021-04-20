@@ -8,5 +8,13 @@
 <body>
     <h1>Engagement Summary</h1>
     <img src="{{ url_for('static', filename=graph) }}" />
+
+    <form action="{{url_for('send_result')}}" method="POST">
+        <input type="email" name="email" id="" placeholder="Email" required>
+<!--        <input type="text" name="subject" id="" placeholder="Subject" required>-->
+<!--        <textarea name="message" id="" cols="30" placeholder="Message Body" rows="10" required></textarea>-->
+        <input type="submit" value="Send Message" name="" id="">
+    </form>
+
 </body>
 </html>
