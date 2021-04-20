@@ -71,12 +71,6 @@ class VideoCamera(object):
         face_rects = face_cascade.detectMultiScale(gray, 1.3, 5)
 
         for (x, y, w, h) in face_rects:
-            """cv2.rectangle(image, (x, y - 50), (x + w, y + h + 10), (255, 0, 0), 2)
-            roi_gray = gray[y:y + h, x:x + w]
-            cropped_img = np.expand_dims(np.expand_dims(cv2.resize(roi_gray, (48, 48)), -1), 0)
-            prediction = edEmoModel.predict(cropped_img)
-            maximumIndex = int(np.argmax(prediction))
-            cv2.putText(image, emotion_dictionary[maximumIndex], (x + 20, y - 60), cv2.FONT_HERSHEY_SIMPLEX, 1,(255, 255, 255), 2,cv2.LINE_AA)"""
             cv2.rectangle(image, (x, y - 50), (x + w, y + h + 10), (255, 0, 0), 2)
             roi_gray = gray[y:y + h, x:x + w]
             np.set_printoptions(formatter={'float_kind': '{:f}'.format})
@@ -93,11 +87,11 @@ class VideoCamera(object):
 
             # Run timer
             current_time = round(time.time() - self.start_time, 2)
-            time.sleep(0.25)
+            time.sleep(1.0)
             self.time_data = np.append(self.time_data, current_time)
             status =""
 
-            if maxindex in [3, 4]:
+            if maxindex in [3, 4, 6]:
                 self.prediction_data = np.append(self.prediction_data, probabities[maxindex].item() * 100)
                 status = "engaged"
                 print('enagaged')

@@ -14,40 +14,33 @@
       body {
           margin: 0;
           padding: 0;
-          display: flex;
-          justify-content: center;
-          align-items: center;
           background-color:#141830;
         }
 
       h1{
+          margin-top: 3%;
           color:white;
           font-family: 'Roboto',sans-serif;
           font-size: 3rem;
-          margin-left: -10%;
-          justify-content: center;
-          align-items: center;
-        margin-left: 50px;
-        margin-right: 50px;
+          text-align: center;
       }
-      img {
+      #bg {
         /*display: block;
         margin-left: auto;
         margin-right: auto;
         width: 60%*/
+        margin-left: 5%;
         height:400px;
         width: 600px;
-        margin-top:8%;
-        justify-content: center;
-        align-items: center;
+        margin-top:5%;
         border-radius: 25px;
       }
-      button {
+      #b2 {
         /*margin-left: 15%;
         margin-top:35%;*/
         position: absolute;
-        right: 3%;
-        top: 12%;
+        right: 43%;
+        top:30%;
         background-color: #e65b49;
         padding: 15px;
         border-radius: 80px;
@@ -60,33 +53,58 @@
         font-size: 1.2rem;
 
       }
-      button:hover{
+      #b2:hover{
         transform: scale(1.1);
         box-shadow: 3px 3px 20px #e65b49;
 
       }
       #logo{
         position: absolute;
-        top: 2%;
-        left: 20%;
+        top: 4%;
+        left: 5%;
+        /* margin-left: 10%; */
+        /* margin-top: 10%; */
         height: 3vw;
         width: 3vw;
         border-radius: 50%;
         padding: 2%;
         background-color: rgba(255, 255, 255, .8);
       }
+      #b1 {
+        /*margin-left: 15%;
+        margin-top:35%;*/
+        position: absolute;
+        right: 10%;
+        bottom: 10%;
+        background-color: #b9c1fa;
+        padding: 15px;
+        border-radius: 100px;
+        border:none;
+        /* color:white; */
+        cursor:pointer;
+        transition: .5s;
+        text-transform: capitalize;
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 1.2rem;
+
+      }
+      #b1:hover{
+        transform: scale(1.1);
+        box-shadow: 3px 3px 20px #b9c1fa;
+
+      }
+      form{
+        font-size: 100px;
+        
+      }
     </style>
   </head>
   <body>
 
-
-    <h1>Detection on Progress</h1>
-    <a href=results><button><i class="fa fa-stop fa-7x" aria-hidden="true"></i></button></a>
-    <img id="bg" class="center" src="{{ url_for('video_feed') }}">
-<<<<<<< HEAD
     <img src="../static/logo.png" alt="logo" id="logo">
-=======
-    <img src="logo.png" alt="logo" id="logo">
+    <h1>Detection on Progress</h1>
+    <a href=results><button id="b2"><i class="fa fa-stop fa-7x" aria-hidden="true"></i></button></a>
+    <img id="bg" class="center" src="{{ url_for('video_feed') }}">
 
     <form id="f1">
         <div id="chatbox">
@@ -102,7 +120,7 @@
         </div>
     </form>
 
-    <button id="b1" onclick="openbot()">Open ChatBot</button>
+    <button id="b1" onclick="openbot()"><i class="fa fa-user fa-lg" aria-hidden="true"></i></button>
 
   <script>
     document.getElementById("f1").style.display = "none";
@@ -138,6 +156,5 @@
         });
     });
 </script>
->>>>>>> 504e1b1ba0a57b942bf6d6d073e6af0ed146c460
   </body>
 </html>
