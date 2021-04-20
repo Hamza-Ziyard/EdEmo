@@ -2,6 +2,8 @@ from flask import Flask, render_template, Response, make_response, request, sess
 from camera import VideoCamera
 from flask_mail import Mail, Message
 from flask_session import Session
+from datetime import date,datetime
+
 
 app = Flask(__name__)
 
@@ -57,14 +59,18 @@ mail = Mail(app)
 def send_result():
     if request.method == "POST":
         email = request.form['email']
-        # subject = request.form['subject']
         subject = "Engagement results from EdEmo"
-        # msg = request.form['message']
-        msg = "Do not reply"
+        name = request.form['message']
+
+        today = date.today()
+        now_date = today.strftime("%B %d, %Y")
+        now_time = datetime.now()
+
+        msg = "Engagement results of " + name + " on " + now_date + " at " + now_time
         message = Message(subject, sender="edemodc@gmail.com", recipients=[email])
         message.body = msg
         file_name = session['results_image_name']
-        # print("+++++++++++++++++++++File name: "+file_name+"+++++++++++++++++++++++++++")
+
         with app.open_resource("static\\"+file_name) as fp:
             message.attach(file_name, "image/png", fp.read())
 
