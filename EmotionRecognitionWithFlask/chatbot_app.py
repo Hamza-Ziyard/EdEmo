@@ -22,7 +22,7 @@ run_with_ngrok(chatbot_app)
 
 @chatbot_app.route("/")
 def home():
-    return render_template("index.html")
+    return render_template("ChatBot.html")
 
 
 @chatbot_app.route("/get", methods=["POST"])
