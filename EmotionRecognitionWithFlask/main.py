@@ -58,13 +58,15 @@ def send_result():
     if request.method == "POST":
         email = request.form['email']
         subject = "Engagement results from EdEmo"
-        name = request.form['message']
+        participant_name = request.form['name']
 
         today = date.today()
         now_date = today.strftime("%B %d, %Y")
-        now_time = datetime.now()
+        now = datetime.now()
+        now_time = now.strftime("%H:%M:%S")
 
-        msg = "Engagement results of " + name + " on " + now_date + " at " + now_time
+
+        msg = "Participant name:  " + participant_name + "\nDate: " + now_date + "\nTime: " + now_time
         message = Message(subject, sender="edemodc@gmail.com", recipients=[email])
         message.body = msg
         file_name = session['results_image_name']
