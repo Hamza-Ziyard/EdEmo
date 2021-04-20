@@ -75,7 +75,7 @@ def send_result():
             message.attach(file_name, "image/png", fp.read())
 
         mail.send(message)
-        success = "Message sent"
+        success = "Successfully Sent"
         return render_template("success.html", success=success)
     else:
         return render_template('results.html')
