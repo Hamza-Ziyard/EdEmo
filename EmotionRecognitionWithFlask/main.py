@@ -29,6 +29,7 @@ def display_graph():
     # return render_template("results.html", graph="helloooooooo")
     video_cam.__del__()
     return render_template('results.html', graph=file_name)
+    # return render_template('results.html')
 
 
 
