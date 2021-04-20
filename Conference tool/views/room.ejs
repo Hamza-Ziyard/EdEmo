@@ -14,9 +14,7 @@
    <script src="/socket.io/socket.io.js" defer></script>
    <link rel="stylesheet" href="css/room.css">
    <script src="https://kit.fontawesome.com/c939d0e917.js"></script>
-   <!-- <script  src="js/face-api.min.js" defer></script> -->
    <script src="js/script.js" defer></script>
-   <script src="./js/face-api.min.js"></script>
    <style>
       #video-grid{
          display: flex;
@@ -34,7 +32,8 @@
       }      
       canvas {
          position: absolute;
-         margin-top: -100px;
+
+         /* margin-top: -100px; */
          /* left: 10%;
          top: 20%; */
       }
@@ -45,7 +44,6 @@
       <div class="main__left">
          <div class="main__videos">
             <div id="video-grid">
-               <video id="video" autoplay muted></video>
             </div>
          </div>
          <div class="main__controls">
@@ -64,9 +62,9 @@
                   <i class="fa fa-share-square-o"></i>
                   <span>Share</span>
                </div>
-               <div class="main__controls__button">
+               <div class="main__controls__button" onclick="tracking()" class="main__tracking_button">
                   <i class="fa fa-stop-circle"></i>
-                  <span>Track</span>
+                  <a href="tracking" target="_1_"><span>Track</span></a>
                </div>
                <div class="main__controls__button">
                   <i class="fas fa-user-friends"></i>

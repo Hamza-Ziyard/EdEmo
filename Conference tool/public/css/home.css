@@ -20,7 +20,7 @@ body {
         border-radius: 3px;
       }
 
-      
+
 .completeBox {
   position: relative;
 }
@@ -37,7 +37,7 @@ div {
 }
 
 .bgImg {
-  height: 99vh;
+  height: 100vh;
   width: 50vw;
 }
 
@@ -108,6 +108,7 @@ h1 span {
   margin-bottom: 5%;
   transition: 0.5s;
   color: white;
+  cursor: pointer; 
 }
 
 .set1 .btn1:hover,
@@ -181,4 +182,8 @@ h1 span {
   height: 40px;
   width: 40px;
   cursor: pointer;
+}
+
+button{
+  outline: none;
 }

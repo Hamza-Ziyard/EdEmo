@@ -60,13 +60,13 @@ p{
     padding-left: 38%;
 }
 
-#icon{
+#icon1,#icon2,#icon3,#icon4,#icon5{
     margin-left: 20px;
     color: gray;
     transition: 0.5s;
 }
 
-#icon:hover{
+#icon1:hover,#icon2:hover,#icon3:hover,#icon4:hover,#icon5:hover{
     transform: scale(1.2);
     cursor: pointer;
     color: gold;
@@ -84,6 +84,7 @@ p{
     margin-left: auto;
     margin-right: auto;
     transition: 0.5s;
+    outline: none;
 }
 
 .resultBtn:hover{

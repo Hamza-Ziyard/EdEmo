@@ -108,3 +108,14 @@
 .unmute, .stop {
     color: #CC3B33;
 }
+
+
+a{
+    text-decoration:none;
+    color: white;;
+}
+
+a:hover{
+    text-decoration:none;
+    color: white;;
+}
