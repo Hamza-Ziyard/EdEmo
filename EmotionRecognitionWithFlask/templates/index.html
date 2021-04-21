@@ -5,7 +5,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
     />
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}" />
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css" />
     <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css.css')}}" /> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <style>
@@ -101,7 +101,7 @@
   </head>
   <body>
 
-    <img src="../static/logo.png" alt="logo" id="logo">
+    <img src="../static/images/logo.png" alt="logo" id="logo">
     <h1>Detection on Progress</h1>
     <a href=results><button id="b2"><i class="fa fa-stop fa-7x" aria-hidden="true"></i></button></a>
     <img id="bg" class="center" src="{{ url_for('video_feed') }}">

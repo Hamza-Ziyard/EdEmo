@@ -31,8 +31,8 @@ edEmoModel.add(Dense(1024, activation='relu'))
 edEmoModel.add(Dropout(0.5))
 edEmoModel.add(Dense(7, activation='softmax'))
 
-face_cascade = cv2.CascadeClassifier("haarcascade_frontalface_alt2.xml")
-edEmoModel.load_weights('model.h5')
+face_cascade = cv2.CascadeClassifier("static/models/haarcascade_frontalface_alt2.xml")
+edEmoModel.load_weights('static/models/model.h5')
 emotion_dictionary = {0: "Angry", 1: "Disgusted", 2: "Fearful", 3: "Happy", 4: "Neutral", 5: "Sad", 6: "Surprised"}
 
 
