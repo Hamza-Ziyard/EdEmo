@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>EdEmo Detector</title>
+  <script src="js/face-api.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.1.0/chart.min.js"></script>
+  <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+  <link rel="stylesheet" href="css/tracking.css">
+  <link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+/>
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani&display=swap" rel="stylesheet">
+  <!-- <script defer src="script.js"></script> -->
+  <style>
+    body {
+     background-color: #1a1f3f;
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
+      display:flex;
+      font-family: 'Rajdhani',sans-serif;
+    }
+
+    canvas {
+      position: absolute;
+      margin-top: 10%;
+      margin-left: 5%;
+    }
+  </style>
+</head>
+<body>
+    <h1>Tracking on Progress</h1>
+  <video id="video" width="650" height="560" autoplay muted></video>
+  <div id="chart_container">
+  </div>
+
+  <button id="stop"><i class="fa fa-stop" aria-hidden="true"></i></button>
+  <button id="share" onclick="openForm()"><i class="fa fa-share" aria-hidden="true"></i></button>
+
+
+  <form id="form">
+      <input type="text" placeholder="Enter name"class="input" required>
+      <input type="email" name="mailto" placeholder="Mail to" class="input" required>
+      <input type="datetime-local" name="datetime" class="input" required>
+      <input type="file" name="imgupload" class="choose" required>
+      <br>
+      <input type="submit" value="Send" id="sendBtn">
+      <input type="button" value="Close" id="closeBtn" onclick="closeForm()">
+  </form>
+  <script>
+      const video = document.getElementById('video')
+
+        Promise.all([
+        faceapi.nets.tinyFaceDetector.loadFromUri('js/models'),
+        faceapi.nets.faceLandmark68Net.loadFromUri('js/models'),
+        faceapi.nets.faceRecognitionNet.loadFromUri('js/models'),
+        faceapi.nets.faceExpressionNet.loadFromUri('js/models')
+        ]).then(startVideo)
+
+        function startVideo() {
+        navigator.getUserMedia(
+            { video: {} },
+            stream => video.srcObject = stream,
+            err => console.error(err)
+        )
+        }
+
+        video.addEventListener('play', () => {
+        const canvas = faceapi.createCanvasFromMedia(video)
+        //   const canvas = faceapi.createCanvasFromMedia(video)
+        document.body.append(canvas)
+        const displaySize = { width: video.width, height: video.height }
+        faceapi.matchDimensions(canvas, displaySize)
+        setInterval(async () => {
+            const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions()
+            const resizedDetections = faceapi.resizeResults(detections, displaySize)
+            let chart = canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
+            // faceapi.draw.drawDetections(canvas, resizedDetections)
+            faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
+            faceapi.draw.drawFaceExpressions(canvas, resizedDetections)    
+        }, 100)
+        })
+
+
+        var data = [
+        {
+            x: ['2013-10-04 22:23:00', '2013-11-04 22:23:00', '2013-12-04 22:23:00'],
+            y: [1, 3, 6],
+            type: 'scatter'
+        }
+        ];
+
+        Plotly.newPlot('chart_container', data);
+
+        
+        document.getElementById('form').style.display="none";
+
+        function openForm(){
+            document.getElementById('form').style.display="block";
+            document.getElementById('share').style.display="none";
+        }
+        function closeForm(){
+            document.getElementById('form').style.display="none";
+            document.getElementById('share').style.display="block";
+        }
+
+
+  </script>
+</body>
+</html>
