@@ -40,8 +40,9 @@
   <div id="chart_container">
   </div>
 
+  <button id="start"><i class="fa fa-play" aria-hidden="true"></i></button>
   <button id="stop"><i class="fa fa-stop" aria-hidden="true"></i></button>
-  <button id="share" onclick="openForm()"><i class="fa fa-share" aria-hidden="true"></i></button>
+  <button id="share" onclick="openForm()" ><i class="fa fa-share" aria-hidden="true"></i></button>
 
 
   <form id="form">
@@ -56,6 +57,7 @@
 
 
   <div id="face"></div>
+  <div id="final_chart"></div>
   <script>
       const video = document.getElementById('video')
 
@@ -85,29 +87,26 @@
           angry: '😠',
           fearful: '😨',
           disgusted: '🤢',
-          surprised: '😳'
-        }
-
-        let engaged ={
-          
+          surprised: '🤯'
         }
 
         function detectExpression() {
           // 005 - Set the default Emoji
           face.innerHTML = statusIcons.default
+            const canvas = faceapi.createCanvasFromMedia(video)
           // 006 - setInterval to detect face/espression periodically (every 500 milliseconds)
           const milliseconds = 500
           setInterval(async () => {
             // 007 - Wait to detect face with Expression
-            const canvas = faceapi.createCanvasFromMedia(video)
-            video.append(canvas)
+            document.body.append(canvas)
             const displaySize = { width: video.width, height: video.height }
             faceapi.matchDimensions(canvas, displaySize)
-            const detection = await  faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions()
+            const detection = await  faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions()
+            console.log(detection)
             const resizedDetections = faceapi.resizeResults(detection, displaySize)
             let chart = canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
-            // faceapi.draw.drawDetections(canvas, resizedDetections)
-            // faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
+            faceapi.draw.drawDetections(canvas, resizedDetections)
+            faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
             faceapi.draw.drawFaceExpressions(canvas, resizedDetections)    
             // 008 - detectAllFaces retruns an array of faces with some interesting attributes
             if (detection.length > 0) {
@@ -130,16 +129,17 @@
                   if (value > valueStatus) {
                     status = key
                     valueStatus = value;
-                    console.log(status)
+                    // console.log(status)
 
+
+                    
                     var time = new Date();
-                    // var mins=time.get()
 
                     var data = [{
                       x: [time],
                       // y: ["Happy","Neutral","Surprised","Sad","Fearful","Disgutsed","Angry"],
-                      y:[valueStatus],
-                      mode: 'scatter',
+                      y:[status],
+                      mode: 'line',
                       line: {color: '#80CAF6'}
                     }]
 
@@ -147,22 +147,42 @@
                     Plotly.newPlot('chart_container', data);
 
                     var cnt = 0;
-
-                    var interval = setInterval(function() {
+                    var interval = setInterval(function () {
 
                       var time = new Date();
 
                       var update = {
                       x:  [[time]],
                       // y: [["Happy","Neutral","Surprised","Sad","Fearful","Disgutsed","Angry"]]
-                      y:[[valueStatus]]
+                      y:[[status]]
                       }
 
                       Plotly.extendTraces('chart_container', update, [0])
 
                       if(++cnt === 100) clearInterval(interval);
-                    }, 10000);
-                  }
+                    }, 1000);
+
+
+                                    
+                      // var timeoutId,
+                      //   startButton = document.getElementById('start'),
+                      //   stopButton = document.getElementById('stop');
+
+                      // function startDetection() {
+                      //   timeoutId = setInterval(function(){updateChart()}, updateInterval);
+                      //   startButton.removeEventListener('click', startDetection);
+                      //   stopButton.addEventListener('click', stopDetection);
+                      // }
+
+                      // function stopDetection() {
+                      //   clearTimeout(timeoutId);
+                      //   stopButton.removeEventListener('click', stopDetection);
+                      //   startButton.addEventListener('click', startDetection);
+                      //     Plotly.downloadImage('chart_container', {format: 'png', width: 800, height: 600, filename: 'newplot'});
+                      // }  
+
+
+                    }
                 }
                 // 011 - once we have the highest scored expression (status) we display the right Emoji
                 face.innerHTML = statusIcons[status]
@@ -183,9 +203,45 @@
         })
 
 
-        function stopDetction(){
 
-        }
+
+
+
+        // var time = new Date();
+        //             // var mins=time.get()
+
+        // var data = [{
+        //   x: [time],
+        //   y: ['Happy','Neutral','Surprised','Sad','Fearful','Disgutsed','Angry'],
+        //   mode: 'line',
+        //   line: {color: '#80CAF6'}
+        // }]
+
+
+        // Plotly.newPlot('final_chart', data);
+
+        // var cnt = 0;
+        //     var interval = setInterval(function () {
+
+        //       var time = new Date();
+
+        //       var update = {
+        //       x:  [[time]],
+        //       // y: [["Happy","Neutral","Surprised","Sad","Fearful","Disgutsed","Angry"]]
+        //       y:[[status]]
+        //       }
+
+        //       Plotly.extendTraces('final_chart', update, [0])
+
+        //       if(++cnt === 100) clearInterval(interval);
+        //     }, 500);
+
+
+
+        // function stopDetection(){
+          
+
+        // }
 
         // video.addEventListener('play', () => {
         // const canvas = faceapi.createCanvasFromMedia(video)
