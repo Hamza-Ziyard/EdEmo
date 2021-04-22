@@ -33,6 +33,18 @@ video{
     transition: 0.5s;
 }
 
+#start{
+    position:absolute;
+    bottom:2%;
+    left: 35%;
+    border: none;
+    width: 50px;
+    height:50px;
+    border-radius:50px;
+    background-color:#63f763;
+    transition: 0.5s;
+}
+
 #share:hover{
     transform: scale(1.1);
     box-shadow: 3px 3px 20px #fc8afc;
@@ -41,6 +53,11 @@ video{
 #stop:hover{
     transform: scale(1.1);
     box-shadow: 3px 3px 20px #ff5d51;
+}
+
+#start:hover{
+    transform: scale(1.1);
+    box-shadow: 3px 3px 20px #63f763;
 }
 
 form{
@@ -105,4 +122,12 @@ h1{
     left:5%;
     color: white;
     font-size: 2.5rem;
+}
+
+
+#face{
+    position: absolute;
+    top:15%;
+    left:45%;
+    font-size:2rem;
 }

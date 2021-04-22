@@ -4,8 +4,8 @@
   "description": "Credit to [Web Dev Simplified](https://www.youtube.com/watch?v=DvlyzDZDEq4)",
   "main": "index.js",
   "scripts": {
-    "test": "node_modules/jasmine/bin/jasmine.js",
-    "start": "node server.js",
+    "test": "./node_modules/jasmine/bin/jasmine.js",
+    "start": "./node server.js",
     "test-init": "./node_modules/jasmine/bin/jasmine.js init"
   },
   "keywords": [],
