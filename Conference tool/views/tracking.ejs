@@ -29,7 +29,7 @@
 
     canvas {
       position: absolute;
-      margin-top: 10%;
+      /* margin-top: 10%; */
       margin-left: 5%;
     }
   </style>
@@ -66,13 +66,9 @@
       var clicked=false;
       var clickHandler = function () {
         clicked=!clicked
-        if (clicked){
-            console.log("button clicked")
-        }else{
-            console.log("button not clicked");
-        }
+        
       }
-
+      el.addEventListener('click', clickHandler)
         Promise.all([
         faceapi.nets.tinyFaceDetector.loadFromUri('js/models'),
         faceapi.nets.faceLandmark68Net.loadFromUri('js/models'),
@@ -101,6 +97,16 @@
           disgusted: '🤢',
           surprised: '🤯'
         }
+        let barChartData = {
+                default: 0,
+                neutral: 0,
+                happy: 0,
+                sad: 0,
+                angry: 0,
+                fearful: 0,
+                disgusted: 0,
+                surprised: 0
+              }
 
         function detectExpression() {
           // 005 - Set the default Emoji
@@ -114,23 +120,14 @@
             const displaySize = { width: video.width, height: video.height }
             faceapi.matchDimensions(canvas, displaySize)
             const detection = await  faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions()
-            console.log(detection)
+            console.log(status)
             const resizedDetections = faceapi.resizeResults(detection, displaySize)
             let chart = canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
             faceapi.draw.drawDetections(canvas, resizedDetections)
             faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
             faceapi.draw.drawFaceExpressions(canvas, resizedDetections)    
            
-            let barChartData = {
-                default: 0,
-                neutral: 0,
-                happy: 0,
-                sad: 0,
-                angry: 0,
-                fearful: 0,
-                disgusted: 0,
-                surprised: 0
-              }
+
             // 008 - detectAllFaces retruns an array of faces with some interesting attributes
             if (detection.length > 0) {
               // 009 - walk through all faces detected
