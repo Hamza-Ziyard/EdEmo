@@ -1,7 +1,27 @@
+/*adjusting the length of the slide bar*/
+::-webkit-scrollbar {
+    width: 15px;
+  }
+  
+  /*adjusting the track of the scrollbar*/
+  ::-webkit-scrollbar-track {
+        background-color: #1a1f3f; 
+      }
+  
+  /*styling the slidebar*/
+  ::-webkit-scrollbar-thumb {
+          background-color: #b9c1fa; 
+          border-radius: 3px;
+  }
+  
+
+
 video{
+    width:20vw;
+    height:70vh;
     margin-top:10%;
     margin-left: 5%;
-    height: 200px;
+    /* height: 200px; */
 }
 
 #chart_container{
@@ -12,9 +32,9 @@ video{
 }
 
 #share{
-    position:absolute;
+    position:fixed;
     bottom:2%;
-    left: 45%;
+    right: 5%;
     border: none;
     width: 50px;
     height:50px;
@@ -25,7 +45,7 @@ video{
 #stop{
     position:absolute;
     bottom:2%;
-    right: 40%;
+    right: 10%;
     border: none;
     width: 50px;
     height:50px;
@@ -34,35 +54,19 @@ video{
     transition: 0.5s;
 }
 
-#start{
-    position:absolute;
-    bottom:2%;
-    left: 35%;
-    border: none;
-    width: 50px;
-    height:50px;
-    border-radius:50px;
-    background-color:#63f763;
-    transition: 0.5s;
-}
 
 #share:hover{
     transform: scale(1.1);
     box-shadow: 3px 3px 20px #fc8afc;
 }
 
-#stop:hover{
+#stop:hover,#close:hover{
     transform: scale(1.1);
     box-shadow: 3px 3px 20px #ff5d51;
 }
 
-#start:hover{
-    transform: scale(1.1);
-    box-shadow: 3px 3px 20px #63f763;
-}
-
 form{
-    position: absolute;
+    position: fixed;
     top: 25%;
     right: 10%;
     background-color: rgba(0,0,0,0.7);
@@ -128,7 +132,35 @@ h1{
 
 #face{
     position: absolute;
-    top:15%;
-    left:45%;
+    top:25%;
+    left:10%;
     font-size:2rem;
 }
+
+
+
+#bar-container{
+    display: flex;
+    background-color: rgba(0,0,0,0.7);
+    padding:40px 60px;
+    position: fixed;
+    top:10%;
+    left: 20%;
+}
+
+#close{
+    background-color:#ff5d51;
+    border-radius: 20px;
+    height:40px;
+    width:40px;
+    /* padding:40px; */
+    border: none;
+    cursor: pointer;
+    margin-left: 100%;
+    margin-bottom: 10px;
+
+}
+
+/* #bar-chart-container{
+    
+} */

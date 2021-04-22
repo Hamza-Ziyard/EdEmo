@@ -29,19 +29,20 @@
 
     canvas {
       position: absolute;
-      /* margin-top: 10%; */
-      margin-left: 5%;
+    
+      margin-top: 7%;
     }
   </style>
 </head>
 <body>
     <h1>Tracking on Progress</h1>
   <video id="video" width="650" height="560" autoplay muted></video>
-  <!-- <div id="chart_container"> -->
-<div id="bar-chart-container"></div>
+  <div id="chart_container"></div>
+  
+  <div id="bar-container">
+    <button id="close" onclick="closeResults()"><i class="fa fa-times" aria-hidden="true"></i></button>
+    <div id="bar-chart-container"></div>
   </div>
-
-  <button id="start"><i class="fa fa-play" aria-hidden="true"></i></button>
   <button id="stop" onclick="plotBarGraph()"><i class="fa fa-stop" aria-hidden="true"></i></button>
   <button id="share" onclick="openForm()" ><i class="fa fa-share" aria-hidden="true"></i></button>
 
@@ -55,11 +56,10 @@
       <input type="submit" value="Send" id="sendBtn">
       <input type="button" value="Close" id="closeBtn" onclick="closeForm()">
   </form>
-
-
   <div id="face"></div>
-  <div id="final_chart"></div>
+
   <script>
+    document.getElementById('bar-container').style.display="none";
       const video = document.getElementById('video')
 
       var el = document.getElementById('stop');
@@ -98,7 +98,6 @@
           surprised: '🤯'
         }
         let barChartData = {
-                default: 0,
                 neutral: 0,
                 happy: 0,
                 sad: 0,
@@ -124,7 +123,7 @@
             const resizedDetections = faceapi.resizeResults(detection, displaySize)
             let chart = canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
             faceapi.draw.drawDetections(canvas, resizedDetections)
-            faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
+            // faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
             faceapi.draw.drawFaceExpressions(canvas, resizedDetections)    
            
 
@@ -157,14 +156,13 @@
 
                     var data = [{
                       x: [time],
-                      // y: ["Happy","Neutral","Surprised","Sad","Fearful","Disgutsed","Angry"],
                       y:[status],
                       mode: 'line',
                       line: {color: '#80CAF6'}
                     }]
 
 
-                    // Plotly.newPlot('chart_container', data);
+                    Plotly.newPlot('chart_container', data);
 
                     if (!clicked){
                       barChartData[status]++;
@@ -178,34 +176,13 @@
 
                       var update = {
                       x:  [[time]],
-                      // y: [["Happy","Neutral","Surprised","Sad","Fearful","Disgutsed","Angry"]]
                       y:[[status]]
                       }
 
-                      // Plotly.extendTraces('chart_container', update, [0])
+                      Plotly.extendTraces('chart_container', update, [0])
 
                       if(++cnt === 100) clearInterval(interval);
                     }, 1000);
-
-
-                                    
-                      // var timeoutId,
-                      //   startButton = document.getElementById('start'),
-                      //   stopButton = document.getElementById('stop');
-
-                      // function startDetection() {
-                      //   timeoutId = setInterval(function(){updateChart()}, updateInterval);
-                      //   startButton.removeEventListener('click', startDetection);
-                      //   stopButton.addEventListener('click', stopDetection);
-                      // }
-
-                      // function stopDetection() {
-                      //   clearTimeout(timeoutId);
-                      //   stopButton.removeEventListener('click', stopDetection);
-                      //   startButton.addEventListener('click', startDetection);
-                      //     Plotly.downloadImage('chart_container', {format: 'png', width: 800, height: 600, filename: 'newplot'});
-                      // }  
-
 
                     }
                 }
@@ -250,8 +227,16 @@
           ];
 
           Plotly.newPlot('bar-chart-container', data);
+          Plotly.downloadImage(data, {format: 'png', width: 800, height: 600, filename: 'Engagment results'});
+          
+          document.getElementById('bar-container').style.display="block";
+          document.getElementById('stop').style.display="none";
         }
     
+
+        function closeResults() {
+          document.getElementById('bar-container').style.display="none"
+        }
 
   </script>
 </body>
