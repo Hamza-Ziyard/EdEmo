@@ -1,0 +1,10 @@
+pip install virtualenv
+virtualenv Videorecognition
+Videorecognition\Scripts\activate
+pip install Flask
+pip install opencv-python
+pip install tensorflow
+pip install matplotlib
+pip install flask_mail
+pip install flask_session
+python main.py

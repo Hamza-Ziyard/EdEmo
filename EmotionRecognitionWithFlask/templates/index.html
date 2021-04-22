@@ -1,0 +1,160 @@
+<html>
+  <head>
+    <title>EdEmo Detection</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css.css')}}" /> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500&display=swap');
+      body {
+          margin: 0;
+          padding: 0;
+          background-color:#141830;
+        }
+
+      h1{
+          margin-top: 3%;
+          color:white;
+          font-family: 'Roboto',sans-serif;
+          font-size: 3rem;
+          text-align: center;
+      }
+      #bg {
+        /*display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 60%*/
+        margin-left: 5%;
+        height:400px;
+        width: 600px;
+        margin-top:5%;
+        border-radius: 25px;
+      }
+      #b2 {
+        /*margin-left: 15%;
+        margin-top:35%;*/
+        position: absolute;
+        right: 43%;
+        top:30%;
+        background-color: #e65b49;
+        padding: 15px;
+        border-radius: 80px;
+        border:none;
+        color:white;
+        cursor:pointer;
+        transition: .5s;
+        text-transform: capitalize;
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 1.2rem;
+
+      }
+      #b2:hover{
+        transform: scale(1.1);
+        box-shadow: 3px 3px 20px #e65b49;
+
+      }
+      #logo{
+        position: absolute;
+        top: 4%;
+        left: 5%;
+        /* margin-left: 10%; */
+        /* margin-top: 10%; */
+        height: 3vw;
+        width: 3vw;
+        border-radius: 50%;
+        padding: 2%;
+        background-color: rgba(255, 255, 255, .8);
+      }
+      #b1 {
+        /*margin-left: 15%;
+        margin-top:35%;*/
+        position: absolute;
+        right: 10%;
+        bottom: 10%;
+        background-color: #b9c1fa;
+        padding: 15px;
+        border-radius: 100px;
+        border:none;
+        /* color:white; */
+        cursor:pointer;
+        transition: .5s;
+        text-transform: capitalize;
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 1.2rem;
+
+      }
+      #b1:hover{
+        transform: scale(1.1);
+        box-shadow: 3px 3px 20px #b9c1fa;
+
+      }
+      form{
+        font-size: 100px;
+        
+      }
+    </style>
+  </head>
+  <body>
+
+    <img src="../static/images/logo.png" alt="logo" id="logo">
+    <h1>Detection on Progress</h1>
+    <a href=results><button id="b2"><i class="fa fa-stop fa-7x" aria-hidden="true"></i></button></a>
+    <img id="bg" class="center" src="{{ url_for('video_feed') }}">
+
+    <form id="f1">
+        <div id="chatbox">
+            <div class="col-md-8 ml-auto mr-auto">
+                <p class="botText"><span>Hi! I'm EdEmo Bot.</span></p>
+            </div>
+        </div>
+        <div id="userInput" class="row">
+            <div class="col-md-10">
+                <input id="text" type="text" name="msg" placeholder="Message" class="form-control">
+                <button type="submit" id="send" class="btn btn-warning">Send</button>
+            </div>
+        </div>
+    </form>
+
+    <button id="b1" onclick="openbot()"><i class="fa fa-user fa-lg" aria-hidden="true"></i></button>
+
+  <script>
+    document.getElementById("f1").style.display = "none";
+    function openbot(){
+    document.getElementById("f1").style.display = "block";
+    document.getElementById("b1").style.display = "none";
+    };
+    $(document).ready(function() {
+        $("form").on("submit", function(event) {
+            var rawText = $("#text").val();
+            var userHtml = '<p class="userText"><span>' + rawText + "</span></p>";
+            $("#text").val("");
+            $("#chatbox").append(userHtml);
+            document.getElementById("userInput").scrollIntoView({
+                block: "start",
+                behavior: "smooth",
+            });
+            $.ajax({
+                data: {
+                    msg: rawText,
+                },
+                type: "POST",
+                url: "/get",
+            }).done(function(data) {
+                var botHtml = '<p class="botText"><span>' + data + "</span></p>";
+                $("#chatbox").append($.parseHTML(botHtml));
+                document.getElementById("userInput").scrollIntoView({
+                    block: "start",
+                    behavior: "smooth",
+                });
+            });
+            event.preventDefault();
+        });
+    });
+</script>
+  </body>
+</html>
