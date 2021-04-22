@@ -218,16 +218,29 @@
         }
       
         function plotBarGraph(){
-          var data = [
-          {
-            x: Object.keys(barChartData),
-            y: Object.values(barChartData),
-            type: 'bar'
-          }
-          ];
+          var data = {
+            "data":[
+                    {
+                      "x": Object.keys(barChartData),
+                      "y": Object.values(barChartData),
+                      "type": 'bar'
+                    }
+          ],
+          "layout": {
+                  // "height": 400,
+                  // "width": 500,
+                  "title": "Student Engagment Result",
+                  xaxis:{
+                    title: "Emotions"
+                  },
+                  yaxis:{
+                    title: "Frames"
+                  },
+                }
+        };
 
           Plotly.newPlot('bar-chart-container', data);
-          Plotly.downloadImage(data, {format: 'png', width: 800, height: 600, filename: 'Engagment results'});
+          // Plotly.downloadImage(data, {format: 'png', width: 800, height: 600, filename: 'Engagment results'});
           
           document.getElementById('bar-container').style.display="block";
           document.getElementById('stop').style.display="none";
