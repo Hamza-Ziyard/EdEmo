@@ -5,9 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>EdEmo Detector</title>
+
   <script src="js/face-api.min.js"></script>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.1.0/chart.min.js"></script>
   <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+  <script src="https://smtpjs.com/v3/smtp.js"></script> 
   <link rel="stylesheet" href="css/tracking.css">
   <link
   rel="stylesheet"
@@ -37,7 +40,8 @@
 <body>
     <h1>Tracking on Progress</h1>
   <video id="video" width="650" height="560" autoplay muted></video>
-  <div id="chart_container"></div>
+  <div id="chart_container" ></div>
+  <img id="jpg-export" style="display: none;">
   
   <div id="bar-container">
     <button id="close" onclick="closeResults()"><i class="fa fa-times" aria-hidden="true"></i></button>
@@ -48,12 +52,12 @@
 
 
   <form id="form">
-      <input type="text" placeholder="Enter name"class="input" required>
-      <input type="email" name="mailto" placeholder="Mail to" class="input" required>
-      <input type="datetime-local" name="datetime" class="input" required>
-      <input type="file" name="imgupload" class="choose" required>
+      <input type="text" placeholder="Enter name"class="input" id="sender-name" required>
+      <input type="email" name="mailto" placeholder="Mail to" class="input" id="reciever-email" required>
+      <!-- <input type="datetime-local" name="datetime" class="input" required>
+      <input type="file" name="imgupload" class="choose" required> -->
       <br>
-      <input type="submit" value="Send" id="sendBtn">
+      <input type="button" value="Send" id="sendBtn" onclick="sendMail()">
       <input type="button" value="Close" id="closeBtn" onclick="closeForm()">
   </form>
   <div id="face"></div>
@@ -218,6 +222,7 @@
         }
       
         function plotBarGraph(){
+          var img_jpg= d3.select('#jpg-export');
           var data = [
           {
             x: Object.keys(barChartData),
@@ -226,8 +231,24 @@
           }
           ];
 
-          Plotly.newPlot('bar-chart-container', data);
-          Plotly.downloadImage(data, {format: 'png', width: 800, height: 600, filename: 'Engagment results'});
+          Plotly.newPlot('bar-chart-container', data)
+          .then(
+            function(gd)
+            {
+              Plotly.toImage(gd,{height:600,width:600})
+                .then(
+                    function(url)
+                {
+                  img_jpg.attr("src", url);
+                    
+                }
+                )
+            });
+
+            
+
+
+          // Plotly.downloadImage(data, {format: 'png', width: 800, height: 600, filename: 'Engagment results'});
           
           document.getElementById('bar-container').style.display="block";
           document.getElementById('stop').style.display="none";
@@ -236,6 +257,46 @@
 
         function closeResults() {
           document.getElementById('bar-container').style.display="none"
+        }
+
+        function sendMail() {
+          let name = document.getElementById("sender-name").value;
+          let email = document.getElementById("reciever-email").value;
+          let date = new Date();
+          let emailBody = "Engagement results of participant "+ name + " on "+ String(date.toLocaleDateString()) + " at "+ String(date.toLocaleTimeString());
+
+
+              var base64 = getBase64Image(document.getElementById("jpg-export"));
+
+              Email.send({
+                Host: "smtp.gmail.com",
+                Username : "edemodc@gmail.com",
+                Password : "demolitioncrew",
+                To : email,
+                From : "edemodc@gmail.com",
+                Subject : "Engagement summary from EdEmo",
+                Body : emailBody,
+                        Attachments : [
+                        {
+                            name : "smtpjs.png",
+                            data: base64
+                        }]
+              })
+              .then(function(message){
+                alert("Mail successfully sent to "+email)
+              });
+           
+         
+        }
+
+        function getBase64Image(img) {
+            var canvas = document.createElement("canvas");
+            canvas.width = img.width;
+            canvas.height = img.height;
+            var ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0);
+            var dataURL = canvas.toDataURL("image/png");
+            return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
         }
 
   </script>
