@@ -37,10 +37,12 @@
 <body>
     <h1>Tracking on Progress</h1>
   <video id="video" width="650" height="560" autoplay muted></video>
-  <div id="chart_container">
-  </div>
+  <!-- <div id="chart_container"> -->
 
-  <button id="stop"><i class="fa fa-stop" aria-hidden="true"></i></button>
+  <!-- </div> -->
+  <div id="bar-chart"></div>
+  <button id="start">Play</button>
+  <button id="stop" onclick="displayBarGraph()"><i class="fa fa-stop" aria-hidden="true"></i></button>
   <button id="share" onclick="openForm()"><i class="fa fa-share" aria-hidden="true"></i></button>
 
 
@@ -58,6 +60,16 @@
   <div id="face"></div>
   <script>
       const video = document.getElementById('video')
+
+      let barChatData= {
+          neutral: 0,
+          happy: 0,
+          sad: 0,
+          angry: 0,
+          fearful: 0,
+          disgusted: 0,
+          surprised: 0
+        }
 
         Promise.all([
         faceapi.nets.tinyFaceDetector.loadFromUri('js/models'),
@@ -124,6 +136,19 @@
                  * disgusted: 0.003466457361355424
                  * surprised: 0.000011861078746733256
                  */
+              var el = document.getElementById('stop');
+              var clicked=false;
+              var clickHandler = function () {
+              clicked=!clicked
+                if (clicked){
+                  console.log("button clicked")
+                }else{
+                  console.log("button not clicked");
+                }
+              }
+
+        el.addEventListener('click', clickHandler)
+
                 let status = "";
                 let valueStatus = 0.0;
                 for (const [key, value] of Object.entries(element.expressions)) {
@@ -144,7 +169,7 @@
                     }]
 
 
-                    Plotly.newPlot('chart_container', data);
+                    // Plotly.newPlot('chart_container', data);
 
                     var cnt = 0;
 
@@ -157,9 +182,17 @@
                       // y: [["Happy","Neutral","Surprised","Sad","Fearful","Disgutsed","Angry"]]
                       y:[[valueStatus]]
                       }
+                      
+                      // Plotly.extendTraces('chart_container', update, [0])
 
-                      Plotly.extendTraces('chart_container', update, [0])
+                      // console.log("Is clicked "+document.getElementById('stop').clicked==false)
+                      //Plotting the bar chart
+                      if(!clicked){
+                        barChatData[status]++
+                        
+                      }                      
 
+                    
                       if(++cnt === 100) clearInterval(interval);
                     }, 10000);
                   }
@@ -176,16 +209,30 @@
 
         // 012 - Add a listener once the Video is played
         video.addEventListener('playing', () => {
-          detectExpression()
+          // detectExpression()
           
 
 
         })
 
-
+        document.getElementById('start').addEventListener("click", function myfunc(){
+            detectExpression();
+        });
         function stopDetction(){
 
         }
+
+        function displayBarGraph(){
+          var barchart = [
+                      {
+                        x: Object.keys(barChatData),
+                        y: Object.values(barChatData),
+                        type: 'bar'
+                      }
+                      ];
+            Plotly.newPlot('bar-chart', barchart);
+        }
+        
 
         // video.addEventListener('play', () => {
         // const canvas = faceapi.createCanvasFromMedia(video)
