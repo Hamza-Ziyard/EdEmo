@@ -6,12 +6,6 @@
     * Participant emotion detection.
     * Chatbot engagement.
     
-
-### ---- Important ----
-___
-
-- Read the requirment text [here](https://github.com/hamzaziyard-devep/EdEmo/tree/main/Requirements) to setup all basic requirements.
-
 ### Live Demo
 
 - [EdEmo Conference Tool](https://edemo-conference.herokuapp.com/)
