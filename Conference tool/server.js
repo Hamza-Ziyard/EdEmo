@@ -1,18 +1,17 @@
 const express = require('express')
 const app = express()
-// const cors = require('cors')
-// app.use(cors())
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
 const { ExpressPeerServer } = require('peer');
 const peerServer = ExpressPeerServer(server, {
   debug: true
 });
-// const nodemailer = require('nodemailer');
 const { v4: uuidV4 } = require('uuid')
 
 app.use('/peerjs', peerServer);
 
+
+// ------------ using express connecting the front-end to the backend
 app.use(express.static('public'))
 app.use('/css',express.static(__dirname+ 'public/css'))
 app.use('/js',express.static(__dirname+ 'public/js'))
@@ -23,6 +22,8 @@ app.use('/video',express.static(__dirname+ 'public/video'))
 app.set('views','./views')
 app.set('view engine', 'ejs')
 
+
+// --------------- Routing every pages 
 app.get('', (req, res) => {
   res.render('home')
 })
@@ -51,7 +52,7 @@ app.get('/:room', (req, res) => {
 
 
 
-
+// ---------- socket.io connection is created in the room so connection between users can occur in real time
 io.on('connection', socket => {
   socket.on('join-room', (roomId, userId) => {
     socket.join(roomId)
@@ -67,9 +68,6 @@ io.on('connection', socket => {
     })
   })
 })
-
-
-
 
 
 server.listen(process.env.PORT || 5000)

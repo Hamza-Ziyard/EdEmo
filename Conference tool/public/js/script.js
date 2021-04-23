@@ -13,7 +13,7 @@ myVideo.muted = true;
 const peers = {}
 
 
-// getting the video and audio from the device
+// ------------------------- getting the video and audio from the device and use peerjs to answer call of incoming users
 navigator.mediaDevices.getUserMedia({
   video: true,
   audio: true
@@ -28,6 +28,7 @@ navigator.mediaDevices.getUserMedia({
     })
   })
 
+  // ------ when a new user enters the room socket.io activates
   socket.on('user-connected', userId => {
     connectToNewUser(userId, stream)
   })
@@ -46,7 +47,7 @@ navigator.mediaDevices.getUserMedia({
   })
 })
 
-
+  // ------ when a user leaves the room socket.io deactivates
 socket.on('user-disconnected', userId => {
   if (peers[userId]) peers[userId].close()
 })
@@ -55,6 +56,8 @@ myPeer.on('open', id => {
   socket.emit('join-room', ROOM_ID, id)
 })
 
+
+// ------------ using peer js we connect users by calling them 
 function connectToNewUser(userId, stream) {
   const call = myPeer.call(userId, stream)
   const video = document.createElement('video')
@@ -69,14 +72,14 @@ function connectToNewUser(userId, stream) {
 }
 
 
-// chat window scroll function
+// ----------- chat window scroll function
 const scrollToBottom = () => {
   var d = $('.main__chat_window');
   d.scrollTop(d.prop("scrollHeight"));
 }
 
 
-// mute and unmute functions
+// ----------- mute and unmute functions
 const muteUnmute = () => {
   console.log('access audio controls')
   const enabled = myVideoStream.getAudioTracks()[0].enabled;
@@ -105,18 +108,7 @@ const setUnmuteButton = () => {
   document.querySelector('.main__mute_button').innerHTML = html;
 }
 
-
-
-const tracking = () => {
-  const html = `
-    <i class="unmute fas fa-microphone-slash"></i>
-    <span>Unmute</span>
-  `
-  document.querySelector('.main__tracking_button').innerHTML = html;
-}
-
-
-// play and stop video Functions
+// -------------- play and stop video Functions
 const playStop = () => {
   console.log('access video controls')
   let enabled = myVideoStream.getVideoTracks()[0].enabled;
@@ -146,7 +138,7 @@ const setPlayVideo = () => {
 }
 
 
-// collecting the video and the stream function 
+// ----------------- collecting the video and the stream function 
 function addVideoStream(video, stream) {
   video.srcObject = stream
   video.addEventListener('loadedmetadata', () => {

@@ -1,304 +1,317 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>EdEmo Detector</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>EdEmo Detector</title>
 
-  <script src="js/face-api.min.js"></script>
-  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.1.0/chart.min.js"></script>
-  <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
-  <script src="https://smtpjs.com/v3/smtp.js"></script> 
-  <link rel="stylesheet" href="css/tracking.css">
-  <link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-/>
-<link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani&display=swap" rel="stylesheet">
-  <!-- <script defer src="script.js"></script> -->
-  <style>
-    body {
-     background-color: #1a1f3f;
-      margin: 0;
-      padding: 0;
-      width: 100vw;
-      height: 100vh;
-      display:flex;
-      font-family: 'Rajdhani',sans-serif;
-    }
+    <script src="js/face-api.min.js"></script>
+    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.1.0/chart.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
+    <link rel="stylesheet" href="css/tracking.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rajdhani&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #1a1f3f;
+        margin: 0;
+        padding: 0;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        font-family: "Rajdhani", sans-serif;
+      }
 
-    canvas {
-      position: absolute;
-    
-      margin-top: 7%;
-    }
-  </style>
-</head>
-<body>
+      canvas {
+        position: absolute;
+        margin-left: -5%;
+        margin-top: 7%;
+      }
+    </style>
+  </head>
+  <body>
     <h1>Tracking on Progress</h1>
-  <video id="video" width="650" height="560" autoplay muted></video>
-  <div id="chart_container" ></div>
-  <img id="jpg-export" style="display: none;">
-  
-  <div id="bar-container">
-    <button id="close" onclick="closeResults()"><i class="fa fa-times" aria-hidden="true"></i></button>
-    <div id="bar-chart-container"></div>
-  </div>
-  <button id="stop" onclick="plotBarGraph()"><i class="fa fa-stop" aria-hidden="true"></i></button>
-  <button id="share" onclick="openForm()" ><i class="fa fa-share" aria-hidden="true"></i></button>
+    <video id="video" width="650" height="560" autoplay muted></video>
+    <div id="chart_container"></div>
+    <img id="jpg-export" style="display: none" />
 
+    <div id="bar-container">
+      <button id="close" onclick="closeResults()">
+        <i class="fa fa-times" aria-hidden="true"></i>
+      </button>
+      <div id="bar-chart-container"></div>
+    </div>
+    <button id="stop" onclick="plotBarGraph()">
+      <i class="fa fa-stop" aria-hidden="true"></i>
+    </button>
+    <button id="share" onclick="openForm()">
+      <i class="fa fa-share" aria-hidden="true"></i>
+    </button>
 
-  <form id="form">
-      <input type="text" placeholder="Enter name"class="input" id="sender-name" required>
-      <input type="email" name="mailto" placeholder="Mail to" class="input" id="reciever-email" required>
+    <form id="form">
+      <input
+        type="text"
+        placeholder="Enter name"
+        class="input"
+        id="sender-name"
+        required
+      />
+      <input
+        type="email"
+        name="mailto"
+        placeholder="Mail to"
+        class="input"
+        id="reciever-email"
+        required
+      />
       <!-- <input type="datetime-local" name="datetime" class="input" required>
       <input type="file" name="imgupload" class="choose" required> -->
-      <br>
-      <input type="button" value="Send" id="sendBtn" onclick="sendMail()">
-      <input type="button" value="Close" id="closeBtn" onclick="closeForm()">
-  </form>
-  <div id="face"></div>
+      <br />
+      <input type="button" value="Send" id="sendBtn" onclick="sendMail()" />
+      <input type="button" value="Close" id="closeBtn" onclick="closeForm()" />
+    </form>
+    <div id="face"></div>
 
-  <script>
-    document.getElementById('bar-container').style.display="none";
-      const video = document.getElementById('video')
+    <script>
+      document.getElementById("bar-container").style.display = "none";
+      const video = document.getElementById("video");
 
-      var el = document.getElementById('stop');
-      var clicked=false;
+      var el = document.getElementById("stop");
+      var clicked = false;
       var clickHandler = function () {
-        clicked=!clicked
-        
-      }
-      el.addEventListener('click', clickHandler)
-        Promise.all([
-        faceapi.nets.tinyFaceDetector.loadFromUri('js/models'),
-        faceapi.nets.faceLandmark68Net.loadFromUri('js/models'),
-        faceapi.nets.faceRecognitionNet.loadFromUri('js/models'),
-        faceapi.nets.faceExpressionNet.loadFromUri('js/models')
-        ]).then(startVideo)
+        clicked = !clicked;
+      };
+      el.addEventListener("click", clickHandler);
+      Promise.all([
+        faceapi.nets.tinyFaceDetector.loadFromUri("js/models"),
+        faceapi.nets.faceLandmark68Net.loadFromUri("js/models"),
+        faceapi.nets.faceRecognitionNet.loadFromUri("js/models"),
+        faceapi.nets.faceExpressionNet.loadFromUri("js/models"),
+      ]).then(startVideo);
 
-        function startVideo() {
+      function startVideo() {
         navigator.getUserMedia(
-            { video: {} },
-            stream => video.srcObject = stream,
-            err => console.error(err)
-        )
-        }
+          { video: {} },
+          (stream) => (video.srcObject = stream),
+          (err) => console.error(err)
+        );
+      }
 
+      /**
+       *each face element has a expressions attribute
+       * for example:
+       * neutral: 0.33032259345054626
+       * happy: 0.0004914478631690145
+       * sad: 0.6230283975601196
+       * angry: 0.042668383568525314
+       * fearful: 0.000010881130037887488
+       * disgusted: 0.003466457361355424
+       * surprised: 0.000011861078746733256
+       */
+      const face = document.getElementById("face");
+      let statusIcons = {
+        default: "😎",
+        neutral: "🙂",
+        happy: "😀",
+        sad: "😥",
+        angry: "😠",
+        fearful: "😨",
+        disgusted: "🤢",
+        surprised: "🤯",
+      };
+      let barChartData = {
+        neutral: 0,
+        happy: 0,
+        sad: 0,
+        angry: 0,
+        fearful: 0,
+        disgusted: 0,
+        surprised: 0,
+      };
 
+      function detectExpression() {
+        //Set the default Emoji
+        face.innerHTML = statusIcons.default;
+        const canvas = faceapi.createCanvasFromMedia(video);
+        // setInterval to detect face/espression periodically (every 500 milliseconds)
+        const milliseconds = 500;
+        setInterval(async () => {
+          //  Wait to detect face with Expression
 
-        const face = document.getElementById('face');
-        let statusIcons = {
-          default: '😎',
-          neutral: '🙂',
-          happy: '😀',
-          sad: '😥',
-          angry: '😠',
-          fearful: '😨',
-          disgusted: '🤢',
-          surprised: '🤯'
-        }
-        let barChartData = {
-                neutral: 0,
-                happy: 0,
-                sad: 0,
-                angry: 0,
-                fearful: 0,
-                disgusted: 0,
-                surprised: 0
-              }
+          //canvas which shows th recognition button
+          document.body.append(canvas);
+          const displaySize = { width: video.width, height: video.height };
+          faceapi.matchDimensions(canvas, displaySize);
+          const detection = await faceapi
+            .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
+            .withFaceLandmarks()
+            .withFaceExpressions();
+          console.log(status);
+          const resizedDetections = faceapi.resizeResults(
+            detection,
+            displaySize
+          );
+          let chart = canvas
+            .getContext("2d")
+            .clearRect(0, 0, canvas.width, canvas.height);
+          faceapi.draw.drawDetections(canvas, resizedDetections);
+          faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
 
-        function detectExpression() {
-          // 005 - Set the default Emoji
-          face.innerHTML = statusIcons.default
-            const canvas = faceapi.createCanvasFromMedia(video)
-          // 006 - setInterval to detect face/espression periodically (every 500 milliseconds)
-          const milliseconds = 500
-          setInterval(async () => {
-            // 007 - Wait to detect face with Expression
-            document.body.append(canvas)
-            const displaySize = { width: video.width, height: video.height }
-            faceapi.matchDimensions(canvas, displaySize)
-            const detection = await  faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions()
-            console.log(status)
-            const resizedDetections = faceapi.resizeResults(detection, displaySize)
-            let chart = canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
-            faceapi.draw.drawDetections(canvas, resizedDetections)
-            // faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
-            faceapi.draw.drawFaceExpressions(canvas, resizedDetections)    
-           
+          //detectAllFaces retruns an array of faces with some interesting attributes
+          if (detection.length > 0) {
+            //walk through all faces detected
+            detection.forEach((element) => {
+              let status = "";
+              let valueStatus = 0.0;
+              for (const [key, value] of Object.entries(element.expressions)) {
+                if (value > valueStatus) {
+                  status = key;
+                  valueStatus = value;
 
-            // 008 - detectAllFaces retruns an array of faces with some interesting attributes
-            if (detection.length > 0) {
-              // 009 - walk through all faces detected
-              detection.forEach(element => {
-                /**
-                 * 010 - each face element has a expressions attribute
-                 * for example:
-                 * neutral: 0.33032259345054626
-                 * happy: 0.0004914478631690145
-                 * sad: 0.6230283975601196
-                 * angry: 0.042668383568525314
-                 * fearful: 0.000010881130037887488
-                 * disgusted: 0.003466457361355424
-                 * surprised: 0.000011861078746733256
-                 */
-                let status = "";
-                let valueStatus = 0.0;
-                for (const [key, value] of Object.entries(element.expressions)) {
-                  if (value > valueStatus) {
-                    status = key
-                    valueStatus = value;
-                    // console.log(status)
+                  // ------ Real time line graph plotted
+                  var time = new Date();
 
+                  var data = [
+                    {
+                      x: [time],
+                      y: [status],
+                      mode: "line",
+                      line: { color: "#80CAF6" },
+                    },
+                  ];
 
-                    
+                  Plotly.newPlot("chart_container", data);
+
+                  if (!clicked) {
+                    barChartData[status]++;
+                    console.log("Collecting data to bar graph..");
+                  }
+
+                  var cnt = 0;
+                  var interval = setInterval(function () {
                     var time = new Date();
 
-                    var data = [{
-                      x: [time],
-                      y:[status],
-                      mode: 'line',
-                      line: {color: '#80CAF6'}
-                    }]
+                    var update = {
+                      x: [[time]],
+                      y: [[status]],
+                    };
 
+                    Plotly.extendTraces("chart_container", update, [0]);
 
-                    Plotly.newPlot('chart_container', data);
+                    if (++cnt === 100) clearInterval(interval);
+                  }, 1000);
 
-                    if (!clicked){
-                      barChartData[status]++;
-                      console.log("Collecting data to bar graph..");
-                    }
-
-                    var cnt = 0;
-                    var interval = setInterval(function () {
-
-                      var time = new Date();
-
-                      var update = {
-                      x:  [[time]],
-                      y:[[status]]
-                      }
-
-                      Plotly.extendTraces('chart_container', update, [0])
-
-                      if(++cnt === 100) clearInterval(interval);
-                    }, 1000);
-
-                    }
+                  // -----------------------------------------
                 }
-                // 011 - once we have the highest scored expression (status) we display the right Emoji
-                face.innerHTML = statusIcons[status]
-              });
-            } else {
-              console.log("No Faces")
-              //face.innerHTML = statusIcons.default;
-            }
-          }, milliseconds);
-        }
+              }
+              // displaying the emoji which has the highest value.
+              face.innerHTML = statusIcons[status];
+            });
+          } else {
+            console.log("No Faces Detected");
+          }
+        }, milliseconds);
+      }
 
-        // 012 - Add a listener once the Video is played
-        video.addEventListener('playing', () => {
-          detectExpression()
-          
+      // calls detection when playing video
+      video.addEventListener("playing", () => {
+        detectExpression();
+      });
 
+      document.getElementById("form").style.display = "none";
 
-        })         
+      function openForm() {
+        document.getElementById("form").style.display = "block";
+        document.getElementById("share").style.display = "none";
+      }
+      function closeForm() {
+        document.getElementById("form").style.display = "none";
+        document.getElementById("share").style.display = "block";
+      }
 
-
-        
-        document.getElementById('form').style.display="none";
-
-        function openForm(){
-            document.getElementById('form').style.display="block";
-            document.getElementById('share').style.display="none";
-        }
-        function closeForm(){
-            document.getElementById('form').style.display="none";
-            document.getElementById('share').style.display="block";
-        }
-      
-        function plotBarGraph(){
-          var img_jpg= d3.select('#jpg-export');
-          var data = [
+      // ---------- plotting the final results of emotions in a graph
+      function plotBarGraph() {
+        var img_jpg = d3.select("#jpg-export");
+        var data = [
           {
             x: Object.keys(barChartData),
             y: Object.values(barChartData),
-            type: 'bar'
-          }
-          ];
+            type: "bar",
+          },
+        ];
 
-          Plotly.newPlot('bar-chart-container', data)
-          .then(
-            function(gd)
+        // ------ the plotted graph is converted to an image to send via email
+        Plotly.newPlot("bar-chart-container", data).then(function (gd) {
+          Plotly.toImage(gd, { height: 600, width: 600 }).then(function (url) {
+            img_jpg.attr("src", url);
+          });
+        });
+
+        document.getElementById("bar-container").style.display = "block";
+        document.getElementById("stop").style.display = "none";
+      }
+
+      function closeResults() {
+        document.getElementById("bar-container").style.display = "none";
+      }
+
+      // the function on mail to be sent
+      function sendMail() {
+        // ------- body of mail contents
+        let name = document.getElementById("sender-name").value;
+        let email = document.getElementById("reciever-email").value;
+        let date = new Date();
+        let emailBody =
+          "Engagement results of participant " +
+          name +
+          " on " +
+          String(date.toLocaleDateString()) +
+          " at " +
+          String(date.toLocaleTimeString());
+
+        
+        var base64 = getBase64Image(document.getElementById("jpg-export"));
+
+        // ---using smtp the emails are sent to related address by edemodc@gmail.com
+        Email.send({
+          Host: "smtp.gmail.com",
+          Username: "edemodc@gmail.com",
+          Password: "demolitioncrew",
+          To: email,
+          From: "edemodc@gmail.com",
+          Subject: "Engagement summary from EdEmo",
+          Body: emailBody,
+          Attachments: [
             {
-              Plotly.toImage(gd,{height:600,width:600})
-                .then(
-                    function(url)
-                {
-                  img_jpg.attr("src", url);
-                    
-                }
-                )
-            });
+              name: "smtpjs.png",
+              data: base64,
+            },
+          ],
+        }).then(function (message) {
+          alert("mail sent successfully");
+        });
+      }
 
-            
+      function getBase64Image(img) {
+        var canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+        var dataURL = canvas.toDataURL("image/png");
+        return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+      }
 
-
-          // Plotly.downloadImage(data, {format: 'png', width: 800, height: 600, filename: 'Engagment results'});
-          
-          document.getElementById('bar-container').style.display="block";
-          document.getElementById('stop').style.display="none";
-        }
-    
-
-        function closeResults() {
-          document.getElementById('bar-container').style.display="none"
-        }
-
-        function sendMail() {
-          let name = document.getElementById("sender-name").value;
-          let email = document.getElementById("reciever-email").value;
-          let date = new Date();
-          let emailBody = "Engagement results of participant "+ name + " on "+ String(date.toLocaleDateString()) + " at "+ String(date.toLocaleTimeString());
-
-
-              var base64 = getBase64Image(document.getElementById("jpg-export"));
-
-              Email.send({
-                Host: "smtp.gmail.com",
-                Username : "edemodc@gmail.com",
-                Password : "demolitioncrew",
-                To : email,
-                From : "edemodc@gmail.com",
-                Subject : "Engagement summary from EdEmo",
-                Body : emailBody,
-                        Attachments : [
-                        {
-                            name : "smtpjs.png",
-                            data: base64
-                        }]
-              })
-              .then(function(message){
-                alert("mail sent successfully")
-              });
-           
-         
-        }
-
-        function getBase64Image(img) {
-            var canvas = document.createElement("canvas");
-            canvas.width = img.width;
-            canvas.height = img.height;
-            var ctx = canvas.getContext("2d");
-            ctx.drawImage(img, 0, 0);
-            var dataURL = canvas.toDataURL("image/png");
-            return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
-        }
-
-  </script>
-</body>
+    </script>
+  </body>
 </html>
