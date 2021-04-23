@@ -9,6 +9,7 @@ from tensorflow.keras.layers import Dense, Dropout, Flatten
 from tensorflow.keras.optimizers import Adam
 import os
 import matplotlib.pyplot as mat_plt
+import time
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
@@ -123,37 +124,121 @@ elif modelMode == "display":
     # Start webcam feed
     video_capture = cv2.VideoCapture(0)
 
+    # obtain the start time
+    start_time = time.time()
+
+    # data structures
+    time_data = np.array([0])
+    prediction_data = np.array([0])
+
     while True:
         # Capture each frame at a time
         ret, frame = video_capture.read()
         if not ret:
             break
 
-        # converting rgb to grayscale
-        grayscaleImages = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        faces = face_cascade.detectMultiScale(
-            grayscaleImages,
-            scaleFactor=1.3,
-            minNeighbors=5)
+    #     # converting rgb to grayscale
+    #     grayscaleImages = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    #     faces = face_cascade.detectMultiScale(
+    #         grayscaleImages,
+    #         scaleFactor=1.3,
+    #         minNeighbors=5)
 
-        # Draw rectangle
+    #     # Draw rectangle
+    #     for (x, y, w, h) in faces:
+    #         cv2.rectangle(frame, (x, y - 50), (x + w, y + h + 10), (255, 0, 0), 2)
+    #         roi_gray = grayscaleImages[y:y + h, x:x + w]
+    #         cropped_img = np.expand_dims(np.expand_dims(cv2.resize(roi_gray, (48, 48)), -1), 0)
+    #         prediction = edEmoModel.predict(cropped_img)
+    #         maximumIndex = int(np.argmax(prediction))
+    #         cv2.putText(frame, emotion_dictionary[maximumIndex], (x + 20, y - 60), cv2.FONT_HERSHEY_SIMPLEX, 1,
+    #                     (255, 255, 255), 2,
+    #                     cv2.LINE_AA)
+
+    #     # Display frame
+    #     cv2.imshow('Video', frame)
+
+    #     if cv2.waitKey(1) & 0xFF == ord('q'):
+    #         break
+
+    # # When everything is done, release the capture
+    # video_capture.release()
+    # cv2.destroyAllWindows()
+
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        faces = face_cascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
+
         for (x, y, w, h) in faces:
             cv2.rectangle(frame, (x, y - 50), (x + w, y + h + 10), (255, 0, 0), 2)
-            roi_gray = grayscaleImages[y:y + h, x:x + w]
+            roi_gray = gray[y:y + h, x:x + w]
+            np.set_printoptions(formatter={'float_kind': '{:f}'.format})
             cropped_img = np.expand_dims(np.expand_dims(cv2.resize(roi_gray, (48, 48)), -1), 0)
             prediction = edEmoModel.predict(cropped_img)
+<<<<<<< HEAD
             print(prediction)
             maximumIndex = int(np.argmax(prediction))
             cv2.putText(frame, emotion_dictionary[maximumIndex], (x + 20, y - 60), cv2.FONT_HERSHEY_SIMPLEX, 1,
                         (255, 255, 255), 2,
                         cv2.LINE_AA)
+=======
+>>>>>>> dccae58752d28e2b6ffd2915a6d61b606a170562
 
-        # Display frame
-        cv2.imshow('Video', frame)
+            # Calculating the prediction percentage
+            maxindex = int(np.argmax(prediction))
+            data = cropped_img.astype('float32')
+            data /= 255
+            probabilities = edEmoModel.predict_proba(data, verbose=1)[0]
+            max_string = str(probabilities[maxindex].item() * 100)
+            first_three = ' '+max_string[0:3] + '%'
 
+            # Run timer
+            current_time = round(time.time()-start_time,2)
+            time.sleep(0.25)
+            time_data = np.append(time_data,current_time)
+
+            if maxindex in [3,5]:
+                prediction_data = np.append(prediction_data, probabilities[maxindex].item() * 100)
+                print('enagaged')
+            else:
+                prediction_data = np.append(prediction_data,probabilities[maxindex].item() * -100)
+                print('not enageged')
+            # checkWhetherEngaged(prediction_data,probabilities,maxindex)
+
+
+            cv2.putText(frame, emotion_dictionary[maxindex] + first_three, (x + 20, y - 60), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                        (255, 255, 255), 2, cv2.LINE_AA)
+
+        cv2.imshow('Video', cv2.resize(frame, (1600, 960), interpolation=cv2.INTER_CUBIC))
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-    # When everything is done, release the capture
     video_capture.release()
     cv2.destroyAllWindows()
+
+    # display graph
+    mat_plt.plot(time_data,prediction_data)
+    mat_plt.xlabel("Time")
+    mat_plt.ylabel("Engagement")
+    mat_plt.show()
+
+# def display_graph(time_data,prediction_data):
+#     mat_plt.plot(time_data,prediction_data)
+#     mat_plt.xlabel("Time")
+#     mat_plt.ylabel("Engagement")
+#     mat_plt.show()
+
+# def checkWhetherEngaged(prediction_data,probabilities,maxindex):
+#     if maxindex in [3,5]:
+#         prediction_data = np.append(prediction_data, probabilities[maxindex].item() * 100)
+#         print('enagaged')
+#     else:
+#         prediction_data = np.append(prediction_data,probabilities[maxindex].item() * -100)
+#         print('not enageged')    
+
+# def calculatePredictionPercentage(maxindex,prediction,probabilities):
+#     maxindex = int(np.argmax(prediction))
+#             data = cropped_img.astype('float32')
+#             data /= 255
+#             probabilities = edEmoModel.predict_proba(data, verbose=1)[0]
+#             max_string = str(probabilities[maxindex].item() * 100)
+#             first_three = ' '+max_string[0:3] + '%'
