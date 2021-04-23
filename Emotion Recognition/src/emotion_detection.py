@@ -142,6 +142,7 @@ elif modelMode == "display":
             roi_gray = grayscaleImages[y:y + h, x:x + w]
             cropped_img = np.expand_dims(np.expand_dims(cv2.resize(roi_gray, (48, 48)), -1), 0)
             prediction = edEmoModel.predict(cropped_img)
+            print(prediction)
             maximumIndex = int(np.argmax(prediction))
             cv2.putText(frame, emotion_dictionary[maximumIndex], (x + 20, y - 60), cv2.FONT_HERSHEY_SIMPLEX, 1,
                         (255, 255, 255), 2,
