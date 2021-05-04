@@ -9,6 +9,16 @@
 ### Live Demo
 
 - [EdEmo Conference Tool](https://edemo-conference.herokuapp.com/)
+
+
+### App Process
+
+
+
+https://user-images.githubusercontent.com/77579228/117050671-3dff2200-ad33-11eb-8d3a-feb77e69e784.mp4
+
+
+
 ### Team Members
 ___
 - Our team members are 2nd year Software Engineering and Computer Science undergraduates from Informatics Intitute of Techology. Our names are mentioned below.
